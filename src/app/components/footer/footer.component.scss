@@ -1,0 +1,23 @@
+mat-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--header-color);
+  color: white;
+
+  .spacer {
+    flex: 1;
+  }
+
+  button {
+    margin: 0 8px;
+  }
+}
+
+footer {
+  background-color: var(--footer-color);
+  color: var(--text-color);
+  padding: 1rem;
+  text-align: center;
+  margin-top: auto;
+}

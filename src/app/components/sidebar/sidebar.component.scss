@@ -1,0 +1,52 @@
+::ng-deep .mdc-list-item__primary-text {
+  color: var(--text-color) !important;
+}
+
+mat-sidenav-container {
+  height: 100%;
+  background-color: var(--background-color);
+  color: var(--text-color) !important;
+
+  mat-sidenav {
+    width: 200px;
+    height: 100%;
+    background-color: var(--sidebar-color);
+
+    mat-nav-list {
+      padding-top: 0;
+
+      a {
+        color: var(--text-color);
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  mat-sidenav-content {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+}
+
+mat-nav-list {
+  padding-top: 0;
+
+  a {
+    color: var(--text-color) !important;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}

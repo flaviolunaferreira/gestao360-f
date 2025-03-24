@@ -1,0 +1,30 @@
+mat-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  width: 100vw;
+  top: 0;
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--header-color);
+    color: var(--text-color);
+    width: 100%;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  button {
+    margin: 0 8px;
+  }
+}
