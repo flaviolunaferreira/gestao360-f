@@ -1,0 +1,11 @@
+<div class="toolbar">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Pesquisar</mat-label>
+    <input matInput (input)="onSearchChange($event)" placeholder="Filtrar...">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" (click)="addClick.emit()">
+    <mat-icon>add</mat-icon> Novo
+  </button>
+</div>

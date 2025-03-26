@@ -1,15 +1,12 @@
 <mat-sidenav-container>
   <mat-sidenav mode="side" opened>
     <mat-nav-list>
-      <a mat-list-item href="#">
-        <mat-icon>home</mat-icon>
-        Home
-      </a>
-      <a mat-list-item href="#">
-        <mat-icon>info</mat-icon>
-        About
-      </a>
-      <!-- Adicione mais itens conforme necessário -->
+      <ng-container *ngFor="let option of options">
+        <a mat-list-item href="#">
+          <mat-icon>home</mat-icon>
+          {{ option }}
+        </a>
+      </ng-container>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

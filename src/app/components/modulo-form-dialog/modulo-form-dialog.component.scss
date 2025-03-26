@@ -1,0 +1,22 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  min-width: 400px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.mat-mdc-dialog-actions {
+  padding: 1rem 0 0;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}

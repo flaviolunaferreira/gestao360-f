@@ -1,0 +1,48 @@
+@if (loading) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource">
+    @for (column of columns; track column.key) {
+      <ng-container [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+        <td mat-cell *matCellDef="let item">
+          @switch (column.type) {
+            @case ('currency') {
+              R$ {{ item[column.key] | number:'1.2-2' }}
+            }
+            @case ('boolean') {
+              <mat-icon [color]="item[column.key] ? 'primary' : 'warn'">
+                {{ item[column.key] ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            }
+            @case ('date') {
+              {{ item[column.key] | date:'dd/MM/yyyy' }}
+            }
+            @default {
+              {{ item[column.key] }}
+            }
+          }
+        </td>
+      </ng-container>
+    }
+
+    @if (showActions) {
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let item">
+          <button mat-icon-button (click)="edit.emit(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="delete.emit(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

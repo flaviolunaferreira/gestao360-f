@@ -1,0 +1,14 @@
+<app-page-container title="Planos" [loading]="loading()">
+  <app-search-toolbar
+    (searchChange)="handleSearch($event)"
+    (addClick)="openFormDialog()"
+  ></app-search-toolbar>
+
+  <app-data-table
+    [dataSource]="filteredPlanos()"
+    [columns]="columns"
+    [loading]="loading()"
+    (edit)="openFormDialog($event)"
+    (delete)="deletePlano($event)"
+  ></app-data-table>
+</app-page-container>

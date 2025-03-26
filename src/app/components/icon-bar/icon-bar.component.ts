@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-icon-bar',
@@ -9,7 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatIconModule]
 })
 export class IconBarComponent {
+  constructor(private router: Router) {}
+
   toggleModule(module: string) {
     // Lógica para habilitar/desabilitar módulos
+  }
+
+  btnClick() {
+    this.router.navigate(['modulo']); // Navega para a rota raiz
   }
 }

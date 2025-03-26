@@ -1,0 +1,112 @@
+::ng-deep .mat-mdc-text-field-wrapper {
+  width: 100%;
+  z-index: 0;
+  background-color: lightgray;
+  height: 30px;
+  border-radius: 5px;
+  align-items: center;
+}
+
+::ng-deep .mat-mdc-card-title, .mat-mdc-card-subtitle {
+  display: block;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.page-container {
+  border-radius: 10px;
+  padding: 0.5rem;
+  height: 100%;
+  background-color: darkgray;
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-container {
+  background-color: lightgray;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px; /* Reduzir a largura máxima */
+}
+
+.form-container {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.search-container {
+  padding: 0 0.5rem;
+}
+
+.table-container {
+  padding: 0.5rem;
+  flex: 1;
+  overflow: auto;
+  margin-top: 0.5rem;
+  max-height: 53%; /* Reduzir a altura máxima do container da tabela */
+  overflow-y: auto; /* Adiciona rolagem vertical */
+
+  table {
+    width: 100%;
+    background-color: var(--sidebar-color);
+
+    th, td {
+      color: var(--text-color);
+      border-bottom-color: var(--border-color);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+mat-form-field {
+  --mdc-filled-text-field-container-color: #{var(--sidebar-color)};
+  --mdc-filled-text-field-active-indicator-color: #{var(--primary-color)};
+  --mdc-filled-text-field-focus-active-indicator-color: #{var(--primary-color)};
+  --mdc-filled-text-field-label-text-color: #{var(--text-color)};
+  --mdc-filled-text-field-input-text-color: #{var(--text-color)};
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: #{var(--sidebar-color)};
+}
+
+.mat-mdc-button {
+  --mdc-text-button-label-text-color: #{var(--text-color)};
+}
+
+.mat-mdc-flat-button {
+  --mdc-filled-button-container-color: #{var(--primary-color)};
+  --mdc-filled-button-label-text-color: white;
+}
+
+.mat-table {
+  width: 100%;
+  height: 100%;
+}
