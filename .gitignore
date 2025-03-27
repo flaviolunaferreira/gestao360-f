@@ -1,1 +1,9 @@
-node_modules
+# Angular
+.angular
+node_modules/
+dist/
+.cache/
+.temp/
+.js.map
+.css.map
+.metadata.json
