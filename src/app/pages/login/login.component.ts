@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../service/login/AuthService.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoginRequest } from '../../interface/Login';
 
 @Component({
   standalone: true,
