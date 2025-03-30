@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ModuloListComponent } from './pages/cadastros/modulo-list/modulo-list.component';
+import { ModuloListComponent } from './pages/cadastros/modulo/modulo-list.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
