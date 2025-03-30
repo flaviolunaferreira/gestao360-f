@@ -27,10 +27,19 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      console.log('Form submitted:', this.loginForm.value); // Para depuração
       this.authService.login(this.loginForm.value as LoginRequest).subscribe({
-        next: () => this.router.navigate(['/app.component']),
-        error: (err) => console.error('Login failed:', err)
+        next: () => {
+          console.log('Login successful, redirecting...');
+          this.router.navigate(['/app.component']);
+        },
+        error: (err) => {
+          console.error('Login failed:', err);
+          // Aqui você pode adicionar um feedback visual para o usuário, como uma mensagem de erro
+        }
       });
+    } else {
+      console.log('Form is invalid');
     }
   }
 }

@@ -9,6 +9,6 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
-  { path: '', redirectTo: '/app.component', pathMatch: 'full' },
   { path: 'modulo', component: ModuloListComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' } // Redireciona qualquer rota não encontrada para a rota raiz
 ];

@@ -17,6 +17,6 @@ export class IconBarComponent {
   }
 
   btnClick() {
-    this.router.navigate(['modulo']); // Navega para a rota raiz
+    this.router.navigate(['modulo']);
   }
 }

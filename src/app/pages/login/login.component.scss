@@ -1,0 +1,127 @@
+// Cores inspiradas no Visual Studio Code
+$background-dark: #1e1e1e; // Fundo escuro do VS Code
+$primary-blue: #007acc; // Azul do VS Code
+$accent-orange: #d19a66; // Laranja para detalhes
+$text-light: #d4d4d4; // Texto claro
+$input-bg: #252526; // Fundo dos inputs
+$border-color: #3c3c3c; // Bordas
+$error-color: #f48771; // Cor para mensagens de erro
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-image: url('./../../../../public/imagens/Senha.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
+  // Adiciona uma camada de overlay para escurecer o fundo e destacar o formulário
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); // Overlay escuro
+    z-index: 1;
+  }
+}
+
+.login-box {
+  position: relative;
+  z-index: 2;
+  background: $background-dark;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+
+  h2 {
+    color: $text-light;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+
+    label {
+      color: $text-light;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      background: $input-bg;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      color: $text-light;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-blue;
+        box-shadow: 0 0 5px rgba($primary-blue, 0.3);
+      }
+
+      &::placeholder {
+        color: #858585;
+      }
+    }
+
+    .error-message {
+      color: $error-color;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 0.75rem;
+    background: $primary-blue;
+    border: none;
+    border-radius: 4px;
+    color: $text-light;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: darken($primary-blue, 10%);
+    }
+
+    &:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+  }
+
+  .forgot-password {
+    margin-top: 1rem;
+
+    a {
+      color: $accent-orange;
+      text-decoration: none;
+      font-size: 0.9rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
