@@ -10,13 +10,19 @@
     {{ error }}
   </div>
 
+  <div class="form-header">
+    <h2>{{ isEditMode ? 'Editar Registro' : 'Novo Registro ' + config?.title }}</h2>
+  </div>
+
   <!-- Conteúdo principal -->
   <div *ngIf="config" class="content-container">
     <!-- Formulário de Cadastro/Edição -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
-      <h2>{{ isEditMode ? 'Editar Registro' : 'Novo Registro' }}</h2>
-      
-      <div *ngFor="let field of config.fields" class="form-field">
+     
+      <div *ngFor="let field of config.fields" 
+      class="form-field"
+      [class]="getFieldSizeClass(field)">
+
         <label [for]="field.name">{{ field.label }}</label>
         
         <!-- Input Text -->
@@ -53,16 +59,17 @@
           <span *ngIf="form.get(field.name)?.errors?.['max']">Valor máximo: {{ field.maxValue }}</span>
           <span *ngIf="form.get(field.name)?.errors?.['pattern']">Formato inválido</span>
         </div>
-      </div>
-      
-      <div class="form-actions">
-        <button type="submit" [disabled]="form.invalid || isLoading">
-          {{ isEditMode ? 'Atualizar' : 'Salvar' }}
-          <span *ngIf="isLoading" class="button-spinner"></span>
-        </button>
-        <button type="button" (click)="resetForm()" [disabled]="isLoading">Cancelar</button>
-      </div>
+      </div>      
     </form>
+
+    <div class="form-footer">
+      <div class="form-actions">
+        <button type="submit" (click)="onSubmit()" >
+          {{ isEditMode ? 'Atualizar' : 'Salvar' }}
+        </button>
+        <button type="button" (click)="resetForm()">Cancelar</button>
+      </div>
+    </div>
 
     <!-- Filtros -->
     <div *ngIf="filterFields.length > 0" class="filter-container">
@@ -81,7 +88,6 @@
     <!-- Tabela de Dados -->
     <div class="table-container">
       <div class="table-header">
-        <h2>{{ config.title || 'Registros' }}</h2>
         <button (click)="onLoadData.emit()" [disabled]="isLoading">
           Atualizar
           <span *ngIf="isLoading" class="button-spinner"></span>

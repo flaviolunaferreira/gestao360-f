@@ -1,11 +1,13 @@
 .crud-container {
-  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda a altura da viewport */
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
   font-family: 'Consolas', 'Courier New', monospace;
   background-color: var(--background-dark);
   color: var(--text-light);
-  min-height: 100vh;
 }
 
 .loading-overlay {
@@ -62,8 +64,7 @@
 
 h2 {
   color: var(--primary-blue);
-  margin-bottom: 15px;
-  font-size: 1.2rem;
+  padding: 5px;
 }
 
 .form-field, .filter-field {
@@ -198,7 +199,8 @@ h2 {
         animation: spin 1s ease-in-out infinite;
       }
     }
-  }
+  }    
+
 
   .empty-message {
     color: #5a5a5a;
@@ -257,4 +259,42 @@ h2 {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Sistema de grid flexível */
+.form-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+/* Classes de tamanho com spans de coluna */
+.form-field {
+  &.xs-field { grid-column: span 1; }  /* até 15 chars - ocupa 1 coluna */
+  &.sm-field { grid-column: span 1; }  /* 16-30 chars - ocupa 1 coluna */
+  &.md-field { grid-column: span 1; }  /* 31-50 chars - ocupa 1 coluna */
+  &.lg-field { grid-column: span 2; }  /* 51-100 chars - ocupa 2 colunas */
+  &.xl-field { grid-column: span 3; }  /* 101-200 chars - ocupa 3 colunas */
+  &.full-width { grid-column: 1 / -1; } /* ocupa todas as colunas */
+
+  /* Garante que os inputs ocupem 100% */
+  input, select, textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 768px) {
+  .form-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-field {
+    grid-column: span 1 !important;
+  }
 }

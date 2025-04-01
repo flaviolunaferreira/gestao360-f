@@ -122,4 +122,21 @@ export class DynamicCrudComponent implements OnInit {
   get filterFields(): FieldConfig[] {
     return this.config?.fields.filter(field => field.filterable) || [];
   }
+
+  getFieldSizeClass(field: FieldConfig): string {
+    // Campos textarea sempre ocupam linha completa
+    if (field.type === 'textarea') return 'form-field full-width';
+  
+    // Campos sem maxLength assumem tamanho médio
+    if (!field.maxLength) return 'form-field md-field';
+  
+    // Lógica de tamanho baseada em maxLength
+    const length = field.maxLength;
+    
+    if (length <= 15) return 'form-field xs-field';
+    if (length <= 30) return 'form-field sm-field';
+    if (length <= 50) return 'form-field md-field';
+    if (length <= 100) return 'form-field lg-field';
+    return 'form-field xl-field';
+  }
 }
