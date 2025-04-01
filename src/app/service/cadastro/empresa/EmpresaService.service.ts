@@ -13,7 +13,7 @@ export class EmpresaServiceService {
   private readonly apiUrl = `http://localhost:8080/empresas`;
 
   getConfig(): Observable<FieldConfig[]> {
-    return this.http.get<FieldConfig[]>(`${this.apiUrl}/config`).pipe(
+    return this.http.get<FieldConfig[]>(`${this.apiUrl}/options`).pipe(
       catchError((error) => {
         this.messageService.error('Erro ao carregar configuração');
         return throwError(() => error);

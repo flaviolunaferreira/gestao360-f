@@ -32,8 +32,18 @@ export class IconBarComponent {
     ],
     // Opções para o ícone 1 (Cadastro)
     [
-      { icon: 'person_add', text: 'Novo Cadastro', route: '/cadastro/novo' },
-      { icon: 'list', text: 'Lista de Cadastros', route: '/cadastro/lista' }
+      { icon: 'account_balance', text: 'Banco', route: '/cadastro/banco' },
+      { icon: 'credit_card', text: 'Cartão', route: '/cadastro/cartao' },
+      { icon: 'people', text: 'Clientes', route: '/cadastro/clientes' },
+      { icon: 'account_balance_wallet', text: 'Conta', route: '/cadastro/conta' },
+      { icon: 'business', text: 'Empresa Cliente', route: '/empresa-cliente' },
+      { icon: 'local_shipping', text: 'Fornecedor', route: '/cadastro/fornecedor' },
+      { icon: 'badge', text: 'Funcionários', route: '/cadastro/funcionarios' },
+      { icon: 'store', text: 'Loja', route: '/cadastro/loja' },
+      { icon: 'apps', text: 'Módulo', route: '/cadastro/modulo' },
+      { icon: 'assignment', text: 'Plano Contratado', route: '/cadastro/plano-contratado' },
+      { icon: 'inventory', text: 'Produto', route: '/cadastro/produto' },
+      { icon: 'person', text: 'Usuário', route: '/cadastro/usuario' }
     ],
     // Opções para o ícone 2 (Admin)
     [
