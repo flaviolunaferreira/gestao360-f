@@ -5,7 +5,7 @@
   align-items: center;
   height: 100%;
   width: 100%;
-  background-image: url('assets/imagens/Senha.jpg');
+  background-image: url('../../../assets/imagens/senha.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -27,7 +27,7 @@
 .login-box {
   position: relative;
   z-index: 2;
-  background: $background-dark;
+  background: var(--background-dark);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -36,7 +36,7 @@
   text-align: center;
 
   h2 {
-    color: $text-light;
+    color: var(--text-light);
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
     font-weight: 500;
@@ -47,7 +47,7 @@
     text-align: left;
 
     label {
-      color: $text-light;
+      color: var(--text-light);
       font-size: 0.9rem;
       margin-bottom: 0.5rem;
       display: block;
@@ -56,17 +56,17 @@
     .form-control {
       width: 100%;
       padding: 0.75rem;
-      background: $input-bg;
-      border: 1px solid $border-color;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
-      color: $text-light;
+      color: var(--text-light);
       font-size: 1rem;
       transition: border-color 0.3s ease;
 
       &:focus {
         outline: none;
-        border-color: $primary-blue;
-        box-shadow: 0 0 5px rgba($primary-blue, 0.3);
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 5px rgba(var(--primary-blue), 0.3);
       }
 
       &::placeholder {
@@ -75,7 +75,7 @@
     }
 
     .error-message {
-      color: $error-color;
+      color: var(--error-color);
       font-size: 0.85rem;
       margin-top: 0.3rem;
     }
@@ -84,17 +84,17 @@
   .btn-login {
     width: 100%;
     padding: 0.75rem;
-    background: $primary-blue;
+    background: var(--primary-blue);
     border: none;
     border-radius: 4px;
-    color: $text-light;
+    color: var(--text-light);
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: 0.3s ease;
 
     &:hover {
-      background: darken($primary-blue, 10%);
+      background: darken(blue, 10%);
     }
 
     &:disabled {
@@ -107,7 +107,7 @@
     margin-top: 1rem;
 
     a {
-      color: $accent-orange;
+      color: var(--accent-orange);
       text-decoration: none;
       font-size: 0.9rem;
 

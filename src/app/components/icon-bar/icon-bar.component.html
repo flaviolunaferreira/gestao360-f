@@ -1,12 +1,33 @@
 <div class="icon-bar">
-  <button mat-icon-button (click)="toggleModule('inventory')">
-    <mat-icon>inventory</mat-icon>
-  </button>
-  <button mat-icon-button (click)="btnClick()">
-    <mat-icon>shopping_cart</mat-icon>
-  </button>
-  <!-- Adicione mais botões conforme necessário -->
+  <img src="/assets/imagens/home1.jpeg" 
+       [class.selected]="selectedImage === 0"
+       (click)="selectImage(0)"
+       (mouseenter)="hoverImage(0)"
+       (mouseleave)="unhoverImage(0)"
+       title="Página Inicial">
+       
+  <img src="/assets/imagens/cadastro2.jpeg"
+       [class.selected]="selectedImage === 1"
+       (click)="selectImage(1)"
+       (mouseenter)="hoverImage(1)"
+       (mouseleave)="unhoverImage(1)"
+       title="Cadastro">
+       
+  <img src="/assets/imagens/admin1.jpeg"
+       [class.selected]="selectedImage === 2"
+       (click)="selectImage(2)"
+       (mouseenter)="hoverImage(2)"
+       (mouseleave)="unhoverImage(2)"
+       title="Administração">
+       
+  <img src="/assets/imagens/configuracao2.jpeg"
+       [class.selected]="selectedImage === 3"
+       (click)="selectImage(3)"
+       (mouseenter)="hoverImage(3)"
+       (mouseleave)="unhoverImage(3)"
+       title="Configurações">
+       
+  <footer class="footer-container">
+    <!-- ...existing code... -->
+  </footer>
 </div>
-<footer class="footer-container">
-  <!-- ...existing code... -->
-</footer>

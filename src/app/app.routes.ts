@@ -3,12 +3,8 @@ import { ModuloListComponent } from './pages/cadastros/modulo/modulo-list.compon
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
-  { 
-    path: '',
-    loadComponent: () => import('./app.component').then(m => m.AppComponent),
-    canActivate: [authGuard]
-  },
   { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
   { path: 'modulo', component: ModuloListComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' } // Redireciona qualquer rota não encontrada para a rota raiz
+  { path: 'empresa-cliente', loadComponent: () => import('./pages/cadastros/empresa-cliente/empresa-cliente.component').then(m => m.EmpresaClienteComponent) },
+  { path: '**', redirectTo: '', pathMatch: 'full' } 
 ];

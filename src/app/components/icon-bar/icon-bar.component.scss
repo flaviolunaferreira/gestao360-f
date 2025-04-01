@@ -2,13 +2,31 @@
   display: flex;
   flex-direction: column;
   background-color: var(--header-color);
-  width: 50px;
+  width: 62px;
   height: 100%;
   padding: 0.5rem;
   border-right: 1px solid var(--text-color);
-  button {
-    color: var(--text-color);
+  
+  img {
+    margin-top: 1rem;
     margin-bottom: 1rem;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: 3px groove var(--header-color);
+    box-shadow: 2px 2px 5px var(--text-color);
+    z-index: 1;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: green;
+      box-shadow: 0 0 10px green;
+    }
+    
+    &.selected {
+      border-color: blue;
+      box-shadow: 0 0 10px blue;
+    }
   }
+  
 }
-

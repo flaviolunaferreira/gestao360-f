@@ -3,8 +3,8 @@
     <app-toolbar></app-toolbar>
   </div>
   <div class="opcoes">
-    <app-icon-bar></app-icon-bar>
-    <app-sidebar></app-sidebar>
+    <app-icon-bar (sendOptionsToSidebar)="sidebar.options = $event"></app-icon-bar>
+    <app-sidebar #sidebar></app-sidebar>
     <div class="conteudo">
       <div class="page">
         <router-outlet></router-outlet>

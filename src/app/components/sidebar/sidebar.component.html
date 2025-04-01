@@ -2,19 +2,11 @@
   <mat-sidenav mode="side" opened>
     <mat-nav-list>
       <ng-container *ngFor="let option of options">
-        <a mat-list-item href="#">
-          <mat-icon>home</mat-icon>
-          {{ option }}
+        <a mat-list-item (click)="navigateTo(option.route)">
+          <mat-icon>{{option.icon}}</mat-icon>
+          {{option.text}}
         </a>
       </ng-container>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <div class="toolbar">
-      <!-- Conteúdo da barra de ferramentas -->
-    </div>
-    <div class="content">
-      <!-- Conteúdo principal -->
-    </div>
-  </mat-sidenav-content>
 </mat-sidenav-container>
