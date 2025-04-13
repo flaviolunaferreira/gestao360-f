@@ -1,1 +1,87 @@
-<p>loja works!</p>
+<div class="container-fluid mt-3">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-shop me-2"></i>
+          {{ isEditing() ? 'Editar Loja' : 'Cadastrar Nova Loja' }}
+        </h5>
+      </div>
+      
+      <div class="card-body">
+        <form [formGroup]="lojaForm" (ngSubmit)="onSubmit()">
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Nome</label>
+              <input type="text" class="form-control" formControlName="nome" [class.is-invalid]="lojaForm.get('nome')?.invalid && lojaForm.get('nome')?.touched">
+              <div class="invalid-feedback">Nome é obrigatório (máx. 100 caracteres)</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CNPJ</label>
+              <input type="text" class="form-control" formControlName="cnpj" [class.is-invalid]="lojaForm.get('cnpj')?.invalid && lojaForm.get('cnpj')?.touched">
+              <div class="invalid-feedback">CNPJ deve ter 14 dígitos</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" formControlName="email" [class.is-invalid]="lojaForm.get('email')?.invalid && lojaForm.get('email')?.touched">
+              <div class="invalid-feedback">Email inválido</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" class="form-control" formControlName="telefone" [class.is-invalid]="lojaForm.get('telefone')?.invalid && lojaForm.get('telefone')?.touched">
+              <div class="invalid-feedback">Telefone deve ter 10 ou 11 dígitos</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Endereço</label>
+              <input type="text" class="form-control" formControlName="endereco" [class.is-invalid]="lojaForm.get('endereco')?.invalid && lojaForm.get('endereco')?.touched">
+              <div class="invalid-feedback">Endereço é obrigatório (máx. 200 caracteres)</div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-outline-secondary" (click)="isEditing() ? cancelEdit() : lojaForm.reset()">
+              <i class="bi bi-x-circle me-1"></i>
+              {{ isEditing() ? 'Cancelar' : 'Limpar' }}
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="lojaForm.invalid || loading()">
+              <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
+              <i *ngIf="!loading()" class="bi bi-save me-1"></i>
+              {{ isEditing() ? 'Atualizar' : 'Salvar' }}
+            </button>
+          </div>
+        </form>
+  
+        <div class="mt-4 table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let loja of lojas()">
+                <td>{{ loja.nome }}</td>
+                <td>{{ loja.cnpj }}</td>
+                <td>{{ loja.email }}</td>
+                <td>{{ loja.telefone }}</td>
+                <td>{{ loja.endereco }}</td>
+                <td class="text-end">
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" (click)="startEdit(loja)" [disabled]="loading()">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" (click)="deleteLoja(loja.id)" [disabled]="loading()">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

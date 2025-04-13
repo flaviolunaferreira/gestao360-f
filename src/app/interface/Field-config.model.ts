@@ -11,8 +11,10 @@ export interface FieldConfig {
     pattern?: string;
     options?: string[]; // Para dropdown
     showInTable?: boolean;
+    showInForm?: boolean;
     filterable?: boolean;
     defaultValue?: any;
+    mask?: string; // Para input com máscara;
   }
   
   export interface ActionConfig {

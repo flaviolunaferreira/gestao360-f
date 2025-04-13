@@ -11,7 +11,7 @@
   </div>
 
   <div class="form-header">
-    <h2>{{ isEditMode ? 'Editar Registro' : 'Novo Registro ' + config?.title }}</h2>
+    <h2>{{ isEditMode ? 'Editar Registro ' + config?.title: 'Novo Registro ' + config?.title }}</h2>
   </div>
 
   <!-- Conteúdo principal -->
@@ -64,7 +64,7 @@
 
     <div class="form-footer">
       <div class="form-actions">
-        <button type="submit" (click)="onSubmit()" >
+        <button type="submit" (click)="onSubmit()" [disabled]="form.invalid" || isLoading>
           {{ isEditMode ? 'Atualizar' : 'Salvar' }}
         </button>
         <button type="button" (click)="resetForm()">Cancelar</button>

@@ -1,1 +1,87 @@
-<p>fornecedor works!</p>
+<div class="container-fluid mt-3">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-truck me-2"></i>
+          {{ isEditing() ? 'Editar Fornecedor' : 'Cadastrar Novo Fornecedor' }}
+        </h5>
+      </div>
+      
+      <div class="card-body">
+        <form [formGroup]="fornecedorForm" (ngSubmit)="onSubmit()">
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Razão Social</label>
+              <input type="text" class="form-control" formControlName="razaoSocial" [class.is-invalid]="fornecedorForm.get('razaoSocial')?.invalid && fornecedorForm.get('razaoSocial')?.touched">
+              <div class="invalid-feedback">Razão Social é obrigatória (máx. 100 caracteres)</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CNPJ</label>
+              <input type="text" class="form-control" formControlName="cnpj" [class.is-invalid]="fornecedorForm.get('cnpj')?.invalid && fornecedorForm.get('cnpj')?.touched">
+              <div class="invalid-feedback">CNPJ deve ter 14 dígitos</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" formControlName="email" [class.is-invalid]="fornecedorForm.get('email')?.invalid && fornecedorForm.get('email')?.touched">
+              <div class="invalid-feedback">Email inválido</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" class="form-control" formControlName="telefone" [class.is-invalid]="fornecedorForm.get('telefone')?.invalid && fornecedorForm.get('telefone')?.touched">
+              <div class="invalid-feedback">Telefone deve ter 10 ou 11 dígitos</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Endereço</label>
+              <input type="text" class="form-control" formControlName="endereco" [class.is-invalid]="fornecedorForm.get('endereco')?.invalid && fornecedorForm.get('endereco')?.touched">
+              <div class="invalid-feedback">Endereço é obrigatório (máx. 200 caracteres)</div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-outline-secondary" (click)="isEditing() ? cancelEdit() : fornecedorForm.reset()">
+              <i class="bi bi-x-circle me-1"></i>
+              {{ isEditing() ? 'Cancelar' : 'Limpar' }}
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="fornecedorForm.invalid || loading()">
+              <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
+              <i *ngIf="!loading()" class="bi bi-save me-1"></i>
+              {{ isEditing() ? 'Atualizar' : 'Salvar' }}
+            </button>
+          </div>
+        </form>
+  
+        <div class="mt-4 table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Razão Social</th>
+                <th>CNPJ</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let fornecedor of fornecedores()">
+                <td>{{ fornecedor.razaoSocial }}</td>
+                <td>{{ fornecedor.cnpj }}</td>
+                <td>{{ fornecedor.email }}</td>
+                <td>{{ fornecedor.telefone }}</td>
+                <td>{{ fornecedor.endereco }}</td>
+                <td class="text-end">
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" (click)="startEdit(fornecedor)" [disabled]="loading()">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" (click)="deleteFornecedor(fornecedor.id)" [disabled]="loading()">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

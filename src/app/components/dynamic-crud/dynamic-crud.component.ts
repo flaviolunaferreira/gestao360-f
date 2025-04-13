@@ -2,13 +2,15 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FieldConfig, DynamicTableConfig } from '../../interface/Field-config.model';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-dynamic-crud',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './dynamic-crud.component.html',
-  styleUrls: ['./dynamic-crud.component.scss']
+  styleUrls: ['./dynamic-crud.component.scss'],
+  providers: [provideNgxMask()]
 })
 export class DynamicCrudComponent implements OnInit {
   @Input() config?: DynamicTableConfig;
@@ -42,17 +44,18 @@ export class DynamicCrudComponent implements OnInit {
   private initForms(): void {
     // Inicializa o formulário principal
     const formGroup: any = {};
-    this.config!.fields.forEach(field => {
-      const validators = [];
-      if (field.required) validators.push(Validators.required);
-      if (field.minLength) validators.push(Validators.minLength(field.minLength));
-      if (field.maxLength) validators.push(Validators.maxLength(field.maxLength));
-      if (field.minValue) validators.push(Validators.min(field.minValue));
-      if (field.maxValue) validators.push(Validators.max(field.maxValue));
-      if (field.pattern) validators.push(Validators.pattern(field.pattern));
-      
-      formGroup[field.name] = [field.defaultValue || '', validators];
-    });
+    this.config!.fields
+      .forEach(field => {
+        const validators = [];
+        if (field.required) validators.push(Validators.required);
+        if (field.minLength) validators.push(Validators.minLength(field.minLength));
+        if (field.maxLength) validators.push(Validators.maxLength(field.maxLength));
+        if (field.minValue) validators.push(Validators.min(field.minValue));
+        if (field.maxValue) validators.push(Validators.max(field.maxValue));
+        if (field.pattern) validators.push(Validators.pattern(field.pattern));
+        
+        formGroup[field.name] = [field.defaultValue || '', validators];
+      });
     this.form = this.fb.group(formGroup);
 
     // Inicializa o formulário de filtro
@@ -116,6 +119,7 @@ export class DynamicCrudComponent implements OnInit {
   }
 
   get tableFields(): FieldConfig[] {
+    // Inclui apenas campos com showInTable: true
     return this.config?.fields.filter(field => field.showInTable) || [];
   }
 
@@ -138,5 +142,14 @@ export class DynamicCrudComponent implements OnInit {
     if (length <= 50) return 'form-field md-field';
     if (length <= 100) return 'form-field lg-field';
     return 'form-field xl-field';
+  }
+
+  getMaskedValue(field: FieldConfig, value: any): string {
+    // Aplica a máscara se o campo tiver uma máscara definida
+    if (field.mask) {
+      const maskPipe = new NgxMaskPipe();
+      return maskPipe.transform(value, field.mask);
+    }
+    return value;
   }
 }
