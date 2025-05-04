@@ -12,6 +12,7 @@ import { ProdutoComponent } from './pages/cadastros/produto/produto.component';
 import { UsuarioComponent } from './pages/cadastros/usuario/usuario.component';
 import { ContaComponent } from './pages/cadastros/conta/conta.component';
 import { PlanoListComponent } from './pages/cadastros/plano/plano-list.component';
+import { ContaCorrenteComponent } from './pages/cadastros/Conta-Corrente/Conta-Corrente.component';
 
 export const routes: Routes = [
   // Rotas de cadastro (todas públicas inicialmente)
@@ -27,6 +28,8 @@ export const routes: Routes = [
   { path: 'plano', component: PlanoListComponent },
   { path: 'produto', component: ProdutoComponent },
   { path: 'usuario', component: UsuarioComponent },
+  { path: 'conta-corrente', component: ContaCorrenteComponent },
+
   
   // Rota de login (pública)
   { path: 'login', component: LoginComponent },

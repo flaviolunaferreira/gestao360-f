@@ -1,0 +1,233 @@
+<div class="container-fluid mt-3">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <i class="bi bi-bank2 me-2"></i>
+        {{ isEditing() ? 'Editar Conta Corrente' : 'Contas Correntes' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="contaForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <label class="form-label">Número</label>
+            <input type="text" class="form-control" formControlName="numero" [class.is-invalid]="contaForm.get('numero')?.invalid && contaForm.get('numero')?.touched">
+            <div class="invalid-feedback">Número é obrigatório (máx. 20 caracteres)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Data de Abertura</label>
+            <input type="date" class="form-control" formControlName="dataAbertura" [class.is-invalid]="contaForm.get('dataAbertura')?.invalid && contaForm.get('dataAbertura')?.touched">
+            <div class="invalid-feedback">Data de abertura é obrigatória</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Banco</label>
+            <select class="form-select" formControlName="bancoId" id="idBanco" [class.is-invalid]="contaForm.get('bancoId')?.invalid && contaForm.get('bancoId')?.touched">
+              <option value="" disabled>Selecione um banco</option>
+              <option *ngFor="let banco of bancos()" [value]="banco.id">{{ banco.nome }}</option>
+            </select>
+            <div class="invalid-feedback">Banco é obrigatório</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Tipo de Conta</label>
+            <select class="form-select" formControlName="tipoConta" [class.is-invalid]="contaForm.get('tipoConta')?.invalid && contaForm.get('tipoConta')?.touched">
+              <option value="" disabled>Selecione o tipo</option>
+              <option *ngFor="let tipo of tipoContas" [value]="tipo">{{ tipo }}</option>
+            </select>
+            <div class="invalid-feedback">Tipo de conta é obrigatório</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Agência</label>
+            <input type="text" class="form-control" formControlName="agencia" [class.is-invalid]="contaForm.get('agencia')?.invalid && contaForm.get('agencia')?.touched">
+            <div class="invalid-feedback">Agência é obrigatória (máx. 10 caracteres)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Titular</label>
+            <input type="text" class="form-control" formControlName="titular" [class.is-invalid]="contaForm.get('titular')?.invalid && contaForm.get('titular')?.touched">
+            <div class="invalid-feedback">Titular é obrigatório (máx. 100 caracteres)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">CPF/CNPJ</label>
+            <input type="text" class="form-control" formControlName="cpfCnpjTitular" [class.is-invalid]="contaForm.get('cpfCnpjTitular')?.invalid && contaForm.get('cpfCnpjTitular')?.touched">
+            <div class="invalid-feedback">CPF/CNPJ é obrigatório (máx. 14 caracteres)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Saldo</label>
+            <input type="number" class="form-control" formControlName="saldo" [class.is-invalid]="contaForm.get('saldo')?.invalid && contaForm.get('saldo')?.touched">
+            <div class="invalid-feedback">Saldo deve ser maior ou igual a zero</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Limite</label>
+            <input type="number" class="form-control" formControlName="limite" [class.is-invalid]="contaForm.get('limite')?.invalid && contaForm.get('limite')?.touched">
+            <div class="invalid-feedback">Limite deve ser maior ou igual a zero</div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="isEditing() ? cancelEdit() : contaForm.reset()">
+            <i class="bi bi-x-circle me-1"></i>
+            {{ isEditing() ? 'Cancelar' : 'Limpar' }}
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="contaForm.invalid || loading()">
+            <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
+            <i *ngIf="!loading()" class="bi bi-save me-1"></i>
+            {{ isEditing() ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+
+      <hr class="my-4">
+
+      <div class="row mb-3">
+        <div class="col-md-9">
+          <label class="form-label">Filtrar Contas</label>
+          <input type="text" class="form-control" placeholder="Digite número, banco, titular ou CPF/CNPJ..." [(ngModel)]="searchTerm" (ngModelChange)="filterContas()">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="ms-auto">
+            <label class="form-label me-2">Itens página:</label>
+            <select [(ngModel)]="itemsPerPage" (ngModelChange)="onItemsPerPageChange()" class="form-select w-auto">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="loading()" class="text-center my-3">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th (click)="sortTable('numero')" style="cursor: pointer;">
+                Número
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'numero' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'numero' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('bancoNome')" style="cursor: pointer;">
+                Banco
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'bancoNome' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'bancoNome' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('tipoConta')" style="cursor: pointer;">
+                Tipo
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'tipoConta' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'tipoConta' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('agencia')" style="cursor: pointer;">
+                Agência
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'agencia' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'agencia' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('titular')" style="cursor: pointer;">
+                Titular
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'titular' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'titular' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('cpfCnpjTitular')" style="cursor: pointer;">
+                CPF/CNPJ
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'cpfCnpjTitular' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'cpfCnpjTitular' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('saldo')" style="cursor: pointer;">
+                Saldo
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'saldo' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'saldo' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="paginatedContas().length === 0 && !loading()">
+              <td colspan="8" class="text-center">Nenhuma conta encontrada</td>
+            </tr>
+            <tr *ngFor="let conta of paginatedContas()">
+              <td>{{ conta.numero }}</td>
+              <td>{{ conta.bancoNome }}</td>
+              <td>{{ conta.tipoConta }}</td>
+              <td>{{ conta.agencia }}</td>
+              <td>{{ conta.titular }}</td>
+              <td>{{ conta.cpfCnpjTitular }}</td>
+              <td>{{ conta.saldo | currency:'BRL' }}</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary" (click)="startEdit(conta)" [disabled]="loading()">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-outline-info" (click)="showDetails(conta)" [disabled]="loading()">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-danger" (click)="deleteConta(conta.numero)" [disabled]="loading()">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <button class="btn btn-outline-primary" (click)="goToFirstPage()" [disabled]="currentPage() === 1 || loading()">
+          <i class="bi bi-chevron-double-left"></i>
+        </button>
+        <div class="btn-group">
+          <button *ngFor="let page of pageNumbers()" class="btn" [class.btn-primary]="currentPage() === page" [class.btn-outline-primary]="currentPage() !== page" (click)="goToPage(page)" [disabled]="loading()">
+            {{ page }}
+          </button>
+        </div>
+        <button class="btn btn-outline-primary" (click)="goToLastPage()" [disabled]="currentPage() === totalPages() || loading()">
+          <i class="bi bi-chevron-double-right"></i>
+        </button>
+      </div>
+
+      <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Detalhes da Conta Corrente</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Número:</strong> {{ selectedConta()?.numero }}</p>
+              <p><strong>Data de Abertura:</strong> {{ selectedConta()?.dataAbertura | date:'dd/MM/yyyy' }}</p>
+              <p><strong>Último Lançamento:</strong> {{ selectedConta()?.dataUltimoLancamento | date:'dd/MM/yyyy' }}</p>
+              <p><strong>Banco:</strong> {{ selectedConta()?.bancoNome }}</p>
+              <p><strong>Tipo:</strong> {{ selectedConta()?.tipoConta }}</p>
+              <p><strong>Agência:</strong> {{ selectedConta()?.agencia }}</p>
+              <p><strong>Titular:</strong> {{ selectedConta()?.titular }}</p>
+              <p><strong>CPF/CNPJ:</strong> {{ selectedConta()?.cpfCnpjTitular }}</p>
+              <p><strong>Saldo:</strong> {{ selectedConta()?.saldo | currency:'BRL' }}</p>
+              <p><strong>Limite:</strong> {{ selectedConta()?.limite | currency:'BRL' }}</p>
+              <p><strong>Criado por:</strong> {{ selectedConta()?.createdBy }}</p>
+              <p><strong>Criado em:</strong> {{ selectedConta()?.createdAt | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

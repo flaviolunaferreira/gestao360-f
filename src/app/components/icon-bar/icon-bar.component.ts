@@ -22,36 +22,37 @@ export class IconBarComponent {
   // Emite as opções para o sidebar quando um ícone é clicado
   @Output() sendOptionsToSidebar = new EventEmitter<SidebarOption[]>();
 
-  // Lista de opções para cada ícone
+  // Lista de opções para cada ícone, com ícones do Bootstrap Icons
   private optionsForIcons: SidebarOption[][] = [
     // Opções para o ícone 0 (Home)
     [
-      { icon: 'home', text: 'Página Inicial', route: '/home' },
-      { icon: 'dashboard', text: 'Dashboard', route: '/dashboard' }
+      { icon: 'house', text: 'Página Inicial', route: '/home' },
+      { icon: 'speedometer2', text: 'Dashboard', route: '/dashboard' }
     ],
     // Opções para o ícone 1 (Cadastro)
     [
-      { icon: 'account_balance', text: 'Banco', route: '/cadastro/banco' },
-      { icon: 'credit_card', text: 'Cartão', route: '/cadastro/cartao' },
+      { icon: 'bank', text: 'Banco', route: '/banco' },
+      { icon: 'cash-coin', text: 'Conta Corrente', route: '/conta-corrente' },
+      { icon: 'credit-card', text: 'Cartão', route: '/cadastro/cartao' },
       { icon: 'people', text: 'Clientes', route: '/cadastro/clientes' },
-      { icon: 'account_balance_wallet', text: 'Conta', route: '/cadastro/conta' },
-      { icon: 'business', text: 'Empresa Cliente', route: '/empresa-cliente' },
-      { icon: 'local_shipping', text: 'Fornecedor', route: '/cadastro/fornecedor' },
-      { icon: 'badge', text: 'Funcionários', route: '/cadastro/funcionarios' },
-      { icon: 'store', text: 'Loja', route: '/cadastro/loja' },
-      { icon: 'apps', text: 'Módulo', route: '/cadastro/modulo' },
-      { icon: 'assignment', text: 'Plano Contratado', route: '/cadastro/plano-contratado' },
-      { icon: 'inventory', text: 'Produto', route: '/cadastro/produto' },
+      { icon: 'wallet2', text: 'Conta', route: '/conta' },
+      { icon: 'building', text: 'Empresa Cliente', route: '/empresa-cliente' },
+      { icon: 'truck', text: 'Fornecedor', route: '/cadastro/fornecedor' },
+      { icon: 'person-badge', text: 'Funcionários', route: '/cadastro/funcionarios' },
+      { icon: 'shop', text: 'Loja', route: '/cadastro/loja' },
+      { icon: 'grid', text: 'Módulo', route: '/cadastro/modulo' },
+      { icon: 'file-text', text: 'Plano Contratado', route: '/cadastro/plano-contratado' },
+      { icon: 'box', text: 'Produto', route: '/cadastro/produto' },
       { icon: 'person', text: 'Usuário', route: '/cadastro/usuario' }
     ],
     // Opções para o ícone 2 (Admin)
     [
-      { icon: 'admin_panel_settings', text: 'Permissões', route: '/admin/permissoes' },
+      { icon: 'shield-lock', text: 'Permissões', route: '/admin/permissoes' },
       { icon: 'people', text: 'Usuários', route: '/admin/usuarios' }
     ],
     // Opções para o ícone 3 (Config)
     [
-      { icon: 'settings', text: 'Configurações', route: '/configuracoes' },
+      { icon: 'gear', text: 'Configurações', route: '/configuracoes' },
       { icon: 'palette', text: 'Temas', route: '/temas' }
     ]
   ];
