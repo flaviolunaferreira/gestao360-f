@@ -1,27 +1,18 @@
-mat-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: var(--header-color);
-  color: white;
-
-  .spacer {
-    flex: 1;
-  }
-
-  button {
-    margin: 0 8px;
-  }
-}
 
 footer {
+  display: flex;
   background-color: var(--footer-color);
   color: var(--text-color);
-  text-align: center;
-  margin-top: auto;
+  align-items: center;
+  .text-white {
+    height: 40px;
+  }
+  p {
+    font-size: 14px;
+    color: var(--text-color);
+    align-content: center;
+    height: 40px;
+    margin-right: 20px;
+  }
 }
 
-::ng-deep .mat-toolbar-row {
-  height: 36px;
-  align-items: center !important;
-}

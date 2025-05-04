@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DynamicCrudComponent } from '../../../components/dynamic-crud/dynamic-crud.component';
 import { EmpresaServiceService } from '../../../service/cadastro/empresa/EmpresaService.service';
 import { CommonModule } from '@angular/common';
-import { MessageService } from '../../../service/Message.service';
 import { FieldConfig } from '../../../interface/Field-config.model';
+import { ToastService } from '../../../service/toast/toast.service';
 
 interface Empresa {
   id: number;
@@ -59,7 +59,7 @@ export class EmpresaClienteComponent implements OnInit {
 
   constructor(
     private empresaService: EmpresaServiceService,
-    private messageService: MessageService
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +84,7 @@ export class EmpresaClienteComponent implements OnInit {
       error: (err) => {
         this.error = 'Falha ao carregar configuração.';
         this.loading = false;
-        this.messageService.error('Erro ao carregar configuração do formulário');
+        this.toast.show('Erro ao carregar configuração do formulário', 'Erro!');
       }
     });
   }
@@ -95,7 +95,7 @@ export class EmpresaClienteComponent implements OnInit {
         this.empresas = data;
       },
       error: (err) => {
-        this.messageService.error('Erro ao carregar lista de empresas');
+        this.toast.show('Erro ao carregar lista de empresas', 'Erro!');
       }
     });
   }
@@ -103,11 +103,11 @@ export class EmpresaClienteComponent implements OnInit {
   createEmpresa(data: Omit<Empresa, 'id'>): void {
     this.empresaService.create(data).subscribe({
       next: () => {
-        this.messageService.success('Empresa criada com sucesso!');
+        this.toast.show('Empresa criada com sucesso!', 'Sucesso!');
         this.loadEmpresas();
       },
       error: (err) => {
-        this.messageService.error('Erro ao criar empresa');
+        this.toast.show('Erro ao criar empresa', 'Erro!');
       }
     });
   }
@@ -115,11 +115,11 @@ export class EmpresaClienteComponent implements OnInit {
   updateEmpresa({id, data}: {id: number, data: Partial<Empresa>}): void {
     this.empresaService.update(id, data).subscribe({
       next: () => {
-        this.messageService.success('Empresa atualizada com sucesso!');
+        this.toast.show('Empresa atualizada com sucesso!', 'Sucesso!');
         this.loadEmpresas();
       },
       error: (err) => {
-        this.messageService.error('Erro ao atualizar empresa');
+        this.toast.show('Erro ao atualizar empresa', 'Erro!');
       }
     });
   }
@@ -127,11 +127,11 @@ export class EmpresaClienteComponent implements OnInit {
   deleteEmpresa(id: number): void {
     this.empresaService.delete(id).subscribe({
       next: () => {
-        this.messageService.success('Empresa excluída com sucesso!');
+        this.toast.show('Empresa excluída com sucesso!', 'Sucesso!');
         this.loadEmpresas();
       },
       error: (err) => {
-        this.messageService.error('Erro ao excluir empresa');
+        this.toast.show('Erro ao excluir empresa', 'Erro!');
       }
     });
   }

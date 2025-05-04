@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CartaoService } from '../../../service/cadastro/Cartao/Cartao.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Cartao, CreateCartaoDTO, UpdateCartaoDTO } from '../../../interface/cadastro/Cartao';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-cartao',
@@ -13,9 +13,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./cartao.component.scss']
 })
 export class CartaoComponent implements OnInit {
+
   private cartaoService = inject(CartaoService);
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
+
 
   cartoes = signal<Cartao[]>([]);
   loading = signal(false);
@@ -29,6 +30,9 @@ export class CartaoComponent implements OnInit {
     dataValidade: ['', Validators.required],
     titular: ['', Validators.required]
   });
+
+  constructor(private toast: ToastService) {};
+    
 
   ngOnInit(): void {
     this.loadCartoes();
@@ -100,16 +104,17 @@ export class CartaoComponent implements OnInit {
         this.showSuccess('Cartão excluído com sucesso');
         this.loadCartoes();
       } catch (error) {
-        this.showError('Erro ao excluir cartão');
+        const errorMessage = (error instanceof Error) ? error.message : 'Erro desconhecido';
+        this.showError(`Erro ao excluir cartão: ${errorMessage}`);
       }
     }
   }
 
   private showSuccess(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 3000, panelClass: ['success-snackbar'] });
+    this.toast.show(message, 'Sucesso!');
   }
 
   private showError(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+    this.toast.show(message, 'Erro!');
   }
 }

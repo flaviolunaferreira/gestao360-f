@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
 interface SidebarOption {
@@ -13,7 +12,7 @@ interface SidebarOption {
   templateUrl: './icon-bar.component.html',
   styleUrls: ['./icon-bar.component.scss'],
   standalone: true,
-  imports: [MatIconModule]
+  imports: []
 })
 export class IconBarComponent {
   constructor(private router: Router) {}

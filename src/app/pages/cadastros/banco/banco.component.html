@@ -1,103 +1,160 @@
 <div class="container-fluid mt-3">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="mb-0">
-          <i class="bi bi-bank me-2"></i>
-          {{ isEditing() ? 'Editar Banco' : 'Cadastrar Novo Banco' }}
-        </h5>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <i class="bi bi-bank me-2"></i>
+        {{ isEditing() ? 'Editar Banco' : 'Bancos' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="bancoForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <label class="form-label">Código</label>
+            <input type="text" class="form-control" formControlName="id" [class.is-invalid]="bancoForm.get('id')?.invalid && bancoForm.get('id')?.touched" id="idBanco">
+            <div class="invalid-feedback">Código é obrigatório (máx. 10 caracteres)</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nome do Banco</label>
+            <input type="text" class="form-control" formControlName="nome" [class.is-invalid]="bancoForm.get('nome')?.invalid && bancoForm.get('nome')?.touched">
+            <div class="invalid-feedback">Nome é obrigatório (máx. 100 caracteres)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Código ISPB</label>
+            <input type="text" class="form-control" formControlName="codigoISPB" [class.is-invalid]="bancoForm.get('codigoISPB')?.invalid && bancoForm.get('codigoISPB')?.touched">
+            <div class="invalid-feedback">ISPB é obrigatório (8 dígitos)</div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="isEditing() ? cancelEdit() : bancoForm.reset()">
+            <i class="bi bi-x-circle me-1"></i>
+            {{ isEditing() ? 'Cancelar' : 'Limpar' }}
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="bancoForm.invalid || loading()">
+            <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
+            <i *ngIf="!loading()" class="bi bi-save me-1"></i>
+            {{ isEditing() ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+
+      <hr class="my-4">
+
+      <div class="row mb-3">
+        <div class="col-md-9">
+          <label class="form-label">Filtrar Bancos</label>
+          <input type="text" class="form-control" placeholder="Digite código, nome ou ISPB..." [(ngModel)]="searchTerm" (ngModelChange)="filterBancos()">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="ms-auto">
+            <label class="form-label me-2">Itens página:</label>
+            <select [(ngModel)]="itemsPerPage" (ngModelChange)="onItemsPerPageChange()" class="form-select w-auto">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+        </div>
       </div>
-      
-      <div class="card-body">
-        <form [formGroup]="bancoForm" (ngSubmit)="onSubmit()">
-          <div class="row g-3 mb-4">
-            <!-- Código -->
-            <div class="col-md-3">
-              <label class="form-label">Código</label>
-              <input type="text" 
-                     class="form-control"
-                     formControlName="codigo"
-                     [class.is-invalid]="bancoForm.get('codigo')?.invalid && bancoForm.get('codigo')?.touched">
-              <div class="invalid-feedback">
-                Código é obrigatório (máx. 10 caracteres)
-              </div>
+
+      <div *ngIf="loading()" class="text-center my-3">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th (click)="sortTable('id')" style="cursor: pointer;">
+                Código
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'id' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'id' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('nome')" style="cursor: pointer;">
+                Nome
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'nome' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'nome' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('codigoISPB')" style="cursor: pointer;">
+                ISPB
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'codigoISPB' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'codigoISPB' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="paginatedBancos().length === 0 && !loading()">
+              <td colspan="4" class="text-center">Nenhum banco encontrado</td>
+            </tr>
+            <tr *ngFor="let banco of paginatedBancos()">
+              <td>{{ banco.id }}</td>
+              <td>{{ banco.nome }}</td>
+              <td>{{ banco.codigoISPB }}</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary" (click)="startEdit(banco)" [disabled]="loading()">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-outline-info" (click)="showDetails(banco)" [disabled]="loading()">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-danger" (click)="deleteBanco(banco.id)" [disabled]="loading()">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Botões de navegação com ícones -->
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <button class="btn btn-outline-primary" (click)="goToFirstPage()" [disabled]="currentPage() === 1 || loading()">
+          <i class="bi bi-chevron-double-left"></i> <!-- Ícone para "Primeiro" -->
+        </button>
+        <div class="btn-group">
+          <button *ngFor="let page of pageNumbers()" class="btn" [class.btn-primary]="currentPage() === page" [class.btn-outline-primary]="currentPage() !== page" (click)="goToPage(page)" [disabled]="loading()">
+            {{ page }}
+          </button>
+        </div>
+        <button class="btn btn-outline-primary" (click)="goToLastPage()" [disabled]="currentPage() === totalPages() || loading()">
+          <i class="bi bi-chevron-double-right"></i> <!-- Ícone para "Último" -->
+        </button>
+      </div>
+
+      <!-- Modal de Detalhes -->
+      <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Detalhes do Banco</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-  
-            <!-- Nome -->
-            <div class="col-md-6">
-              <label class="form-label">Nome do Banco</label>
-              <input type="text"
-                     class="form-control"
-                     formControlName="nome"
-                     [class.is-invalid]="bancoForm.get('nome')?.invalid && bancoForm.get('nome')?.touched">
-              <div class="invalid-feedback">
-                Nome é obrigatório (máx. 100 caracteres)
-              </div>
+            <div class="modal-body">
+              <p><strong>Código     :</strong> {{ selectedBanco()?.id }}</p>
+              <p><strong>Nome       :</strong> {{ selectedBanco()?.nome }}</p>
+              <p><strong>ISPB       :</strong> {{ selectedBanco()?.codigoISPB }}</p>
+              <p><strong>Criado     :</strong> {{ selectedBanco()?.createdAt| date: 'dd/MM/yyyy' }}</p>
+              <p><strong>Atualização:</strong> {{ selectedBanco()?.updatedAt| date: 'dd/MM/yyyy' }}</p>
             </div>
-  
-            <!-- ISPB -->
-            <div class="col-md-3">
-              <label class="form-label">Código ISPB</label>
-              <input type="text"
-                     class="form-control"
-                     formControlName="ispb"
-                     [class.is-invalid]="bancoForm.get('ispb')?.invalid && bancoForm.get('ispb')?.touched">
-              <div class="invalid-feedback">
-                ISPB é obrigatório (8 dígitos)
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
           </div>
-  
-          <div class="d-flex justify-content-end gap-2">
-            <button type="button" 
-                    class="btn btn-outline-secondary"
-                    (click)="isEditing() ? cancelEdit() : bancoForm.reset()">
-              <i class="bi bi-x-circle me-1"></i>
-              {{ isEditing() ? 'Cancelar' : 'Limpar' }}
-            </button>
-            
-            <button type="submit" 
-                    class="btn btn-primary"
-                    [disabled]="bancoForm.invalid || loading()">
-              <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
-              <i *ngIf="!loading()" class="bi bi-save me-1"></i>
-              {{ isEditing() ? 'Atualizar' : 'Salvar' }}
-            </button>
-          </div>
-        </form>
-  
-        <div class="mt-4 table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Nome</th>
-                <th>ISPB</th>
-                <th class="text-end">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let banco of bancos()">
-                <td>{{ banco.codigo }}</td>
-                <td>{{ banco.nome }}</td>
-                <td>{{ banco.ispb }}</td>
-                <td class="text-end">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary"
-                            (click)="startEdit(banco)"
-                            [disabled]="loading()">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn btn-outline-danger"
-                            (click)="deleteBanco(banco.id)"
-                            [disabled]="loading()">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
   </div>
+</div>

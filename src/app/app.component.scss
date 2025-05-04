@@ -6,65 +6,82 @@
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
+}
 
-  .toolbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: 1000;
+  background-color: var(--toolbar-color, #343a40); /* Ajustado para tema escuro */
+}
+
+.opcoes {
+  display: flex;
+  height: calc(100vh - 100px);
+  margin-top: 60px;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.icon-bar {
+  width: 50px;
+  flex-shrink: 0;
+  background-color: var(--sidebar-color);
+}
+
+.sidebar {
+  flex-shrink: 0; /* Garante que a sidebar não encolha */
+}
+
+.conteudo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.conteudo.full-width,
+.conteudo.with-sidebar {
+  margin-left: 0;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  z-index: 1000;
+  background-color: var(--footer-color, #343a40); /* Ajustado para tema escuro */
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+  .icon-bar {
+    width: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .conteudo.with-sidebar,
+  .conteudo.full-width {
+    margin-left: 0;
   }
 
   .opcoes {
-    display: flex;
-    flex: 1;
-    margin-top: 64px; /* Altura da toolbar */
-    overflow: hidden;
-
-    .icon-bar {
-      width: 50px; /* Largura da barra de ícones */
-      background-color: var(--sidebar-color);
-    }
-
-    .sidebar {
-      width: 250px; /* Largura da sidebar */
-      background-color: var(--sidebar-color);
-      transition: transform 0.3s ease;
-      transform: translateX(0);
-    }
-
-    .sidebar.hidden {
-      transform: translateX(-100%);
-    }
-
-    .conteudo {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: 1rem;
-      overflow-y: auto;
-      transition: margin-left 0.3s ease;
-      .page {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    .conteudo.full-width {
-      margin-left: 0;
-    }
-
-    .conteudo.with-sidebar {
-      margin-left: 250px; /* Largura da sidebar */
-    }
-  }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2rem;
-    z-index: 1000;
+    height: calc(100vh - 100px);
   }
 }

@@ -1,11 +1,17 @@
-<div class="toolbar">
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Pesquisar</mat-label>
-    <input matInput (input)="onSearchChange($event)" placeholder="Filtrar...">
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
+<div class="toolbar d-flex align-items-center">
+  <div class="input-group me-3">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Filtrar..."
+      (input)="onSearchChange($event)"
+    />
+    <span class="input-group-text">
+      <i class="bi bi-search"></i>
+    </span>
+  </div>
 
-  <button mat-flat-button color="primary" (click)="addClick.emit()">
-    <mat-icon>add</mat-icon> Novo
+  <button class="btn btn-primary d-flex align-items-center" (click)="addClick.emit()">
+    <i class="bi bi-plus me-2"></i> Novo
   </button>
 </div>

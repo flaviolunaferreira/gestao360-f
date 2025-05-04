@@ -2,26 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Banco, CreateBancoDTO, UpdateBancoDTO } from '../../interface/cadastro/Banco'
-import { MessageService } from '../Message.service'
 @Injectable({ providedIn: 'root' })
 export class BancoService {
   private readonly http = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
   private readonly apiUrl = 'http://localhost:8080/api/bancos';
-
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Ocorreu um erro desconhecido';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Erro do lado do cliente
-      errorMessage = `Erro: ${error.error.message}`;
-    } else {
-      // Erro do lado do servidor
-      errorMessage = error.error?.message || error.message;
-    }
-    
-    this.messageService.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+  
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('An error occurred:', error.message);
+    return throwError(() => new Error('Something went wrong; please try again later.'));
   }
 
   getAll(): Observable<Banco[]> {

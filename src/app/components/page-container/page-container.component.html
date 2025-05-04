@@ -1,11 +1,11 @@
-<mat-card>
-  @if (title) {
-    <mat-card-header>
-      <mat-card-title>{{ title }}</mat-card-title>
-    </mat-card-header>
-  }
+<div class="card">
+  <ng-container *ngIf="title">
+    <div class="card-header">
+      <h5 class="card-title mb-0">{{ title }}</h5>
+    </div>
+  </ng-container>
 
-  <mat-card-content>
+  <div class="card-body">
     <ng-content></ng-content>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>

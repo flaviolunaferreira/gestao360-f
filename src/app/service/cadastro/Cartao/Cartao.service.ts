@@ -2,12 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Cartao, CreateCartaoDTO, UpdateCartaoDTO } from '../../../interface/cadastro/Cartao';
-import { MessageService } from '../../Message.service';
 
 @Injectable({ providedIn: 'root' })
 export class CartaoService {
   private readonly http = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
   private readonly apiUrl = 'http://localhost:8080/api/cartoes';
 
   private handleError(error: HttpErrorResponse) {
@@ -17,7 +15,6 @@ export class CartaoService {
     } else {
       errorMessage = error.error?.message || error.message;
     }
-    this.messageService.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 

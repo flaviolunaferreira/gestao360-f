@@ -2,12 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Funcionario, CreateFuncionarioDTO, UpdateFuncionarioDTO } from '../../../interface/cadastro/Funcionario';
-import { MessageService } from '../../Message.service';
 
 @Injectable({ providedIn: 'root' })
 export class FuncionarioService {
   private readonly http = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
   private readonly apiUrl = 'http://localhost:8080/api/funcionarios';
 
   private handleError(error: HttpErrorResponse) {
@@ -17,7 +15,6 @@ export class FuncionarioService {
     } else {
       errorMessage = error.error?.message || error.message;
     }
-    this.messageService.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 

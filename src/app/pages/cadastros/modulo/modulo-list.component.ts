@@ -2,16 +2,9 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModuloService } from '../../../service/cadastro/modulo/Modulo.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-modulo-page',
@@ -19,13 +12,6 @@ import { firstValueFrom } from 'rxjs';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDividerModule,
     FormsModule
   ],
   templateUrl: './modulo-list.component.html',
@@ -35,7 +21,6 @@ export class ModuloListComponent {
   isEditMode: boolean = false;
   private moduloService = inject(ModuloService);
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
 
   // Estado da aplicação
   modulos = signal<any[]>([]);
@@ -61,7 +46,7 @@ export class ModuloListComponent {
     );
   });
 
-  constructor() {
+  constructor(private toast: ToastService) {
     this.loadModulos();
   }
 
@@ -71,7 +56,7 @@ export class ModuloListComponent {
       const modulos = await firstValueFrom(this.moduloService.getAll());
       this.modulos.set(modulos || []);
     } catch (error) {
-      this.showError('Erro ao carregar módulos');
+      this.toast.show('Erro ao carregar módulos', 'Erro!');
     } finally {
       this.loading.set(false);
     }
@@ -102,19 +87,19 @@ export class ModuloListComponent {
           nome: formData.nome || '',
           percentualCusto: formData.percentualCusto ?? 0 // Garantir que percentualCusto não seja null
         }));
-        this.showSuccess('Módulo atualizado com sucesso');
+        this.toast.show('Módulo atualizado com sucesso', 'Sucesso!');
       } else {
         await firstValueFrom(this.moduloService.create({
           nome: formData.nome || '',
           percentualCusto: formData.percentualCusto ?? 0 // Garantir que percentualCusto não seja null
         }));
-        this.showSuccess('Módulo criado com sucesso');
+        this.toast.show('Módulo criado com sucesso', 'Sucesso!');
       }
 
       this.cancelEdit();
       this.loadModulos();
     } catch (error) {
-      this.showError('Erro ao salvar módulo');
+      this.toast.show('Erro ao salvar módulo', 'Erro!');
     } finally {
       this.loading.set(false);
     }
@@ -124,22 +109,19 @@ export class ModuloListComponent {
     if (confirm('Tem certeza que deseja excluir este módulo?')) {
       try {
         await firstValueFrom(this.moduloService.delete(id));
-        this.showSuccess('Módulo excluído com sucesso');
+        this.toast.show('Módulo excluído com sucesso', 'Sucesso!');
         this.loadModulos();
       } catch (error) {
-        this.showError('Erro ao excluir módulo');
+        this.toast.show('Erro ao excluir módulo', 'Erro!');
       }
     }
   }
 
   private showSuccess(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 3000 });
+    this.toast.show(message, 'Sucesso')
   }
 
   private showError(message: string) {
-    this.snackBar.open(message, 'Fechar', {
-      duration: 5000,
-      panelClass: ['error-snackbar']
-    });
+    this.toast.show(message, 'Erro!');
   }
 }

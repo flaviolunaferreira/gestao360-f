@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -15,7 +14,6 @@ import { HttpClientModule } from '@angular/common/http';
   standalone: true,
   imports: [
     CommonModule,
-    MatSidenavModule,
     RouterModule,
     FooterComponent,
     SidebarComponent,
@@ -25,15 +23,15 @@ import { HttpClientModule } from '@angular/common/http';
   ]
 })
 export class AppComponent {
-  isSidebarOpen = false;
-  sidebarOptions: string[] = [];
+  isSidebarOpen = false; // Controla a visibilidade da sidebar
+  sidebarOptions: string[] = []; // Opções passadas para a sidebar
 
   toggleSidebar(options: string[]) {
     if (this.isSidebarOpen && this.sidebarOptions === options) {
-      this.isSidebarOpen = false;
+      this.isSidebarOpen = false; // Fecha a sidebar se as mesmas opções forem clicadas
     } else {
-      this.isSidebarOpen = true;
-      this.sidebarOptions = options;
+      this.isSidebarOpen = true; // Abre a sidebar
+      this.sidebarOptions = options; // Atualiza as opções
     }
   }
 }

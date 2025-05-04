@@ -2,12 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Fornecedor, CreateFornecedorDTO, UpdateFornecedorDTO } from '../../../interface/cadastro/Fornecedor';
-import { MessageService } from '../../Message.service';
 
 @Injectable({ providedIn: 'root' })
 export class FornecedorService {
   private readonly http = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
   private readonly apiUrl = 'http://localhost:8080/api/fornecedores';
 
   private handleError(error: HttpErrorResponse) {
@@ -17,7 +15,6 @@ export class FornecedorService {
     } else {
       errorMessage = error.error?.message || error.message;
     }
-    this.messageService.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 

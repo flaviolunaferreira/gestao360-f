@@ -1,61 +1,69 @@
 /* Variáveis do tema VS Code */
 :host {
-    .card {
-      background-color: var(--sidebar-color);
-      border-color: var(--border-color);
-      color: var(--text-color);
-  
-      &-header {
-        background-color: var(--header-color) !important;
-        border-bottom-color: var(--border-color);
-      }
-    }
-  
-    .table {
-      --bs-table-bg: var(--sidebar-color);
-      --bs-table-color: var(--text-color);
-      --bs-table-border-color: var(--border-color);
-      --bs-table-striped-bg: #{rgba(var(--primary-blue), 0.05)};
-      --bs-table-hover-bg: #{rgba(var(--primary-blue), 0.15)};
-  
-      th {
-        background-color: var(--header-color);
-      }
-    }
-  
-    .form-control {
-      background-color: var(--input-bg);
-      color: var(--text-color);
-      border-color: var(--border-color);
-  
-      &:focus {
-        border-color: var(--primary-blue);
-        box-shadow: 0 0 0 0.25rem rgba(var(--primary-blue), 0.25);
-      }
-    }
-  
-    .btn-outline-primary {
-      --bs-btn-color: var(--primary-blue);
-      --bs-btn-border-color: var(--primary-blue);
-      --bs-btn-hover-bg: var(--primary-blue);
-    }
-  
-    .btn-outline-danger {
-      --bs-btn-color: var(--error-color);
-      --bs-btn-border-color: var(--error-color);
-      --bs-btn-hover-bg: var(--error-color);
-    }
-  
-    .invalid-feedback {
-      color: var(--error-color);
-    }
-  
-    .is-invalid {
-      border-color: var(--error-color) !important;
+  .card {
+    background-color: var(--sidebar-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+
+    &-header {
+      background-color: var(--header-color) !important;
+      border-bottom-color: var(--border-color);
     }
   }
-  
-  /* Spinner de loading */
-  .spinner-border {
-    vertical-align: middle;
+
+  .table {
+    --bs-table-bg: var(--sidebar-color);
+    --bs-table-color: var(--text-color);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-striped-bg: #{rgba(var(--primary-blue), 0.05)};
+    --bs-table-hover-bg: #{rgba(var(--primary-blue), 0.15)};
+
+    th {
+      background-color: var(--header-color);
+    }
   }
+
+  .form-control, .form-select {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+
+    &:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 0.25rem rgba(var(--primary-blue), 0.25);
+    }
+  }
+
+  .btn-outline-primary {
+    --bs-btn-color: var(--primary-blue);
+    --bs-btn-border-color: var(--primary-blue);
+    --bs-btn-hover-bg: var(--primary-blue);
+    --bs-btn-hover-color: #fff;
+  }
+
+  .btn-primary {
+    --bs-btn-bg: var(--primary-blue);
+    --bs-btn-border-color: var(--primary-blue);
+    --bs-btn-hover-bg: var(--primary-blue);
+    --bs-btn-hover-border-color: var(--primary-blue);
+  }
+
+  .btn-outline-danger {
+    --bs-btn-color: var(--error-color);
+    --bs-btn-border-color: var(--error-color);
+    --bs-btn-hover-bg: var(--error-color);
+  }
+
+  .invalid-feedback {
+    color: var(--error-color);
+  }
+
+  .is-invalid {
+    border-color: var(--error-color) !important;
+  }
+}
+
+/* Spinner de loading */
+.spinner-border {
+  vertical-align: middle;
+}

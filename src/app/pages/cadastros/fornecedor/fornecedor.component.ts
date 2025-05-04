@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FornecedorService } from '../../../service/cadastro/Fornecedor/Fornecedor.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Fornecedor, CreateFornecedorDTO, UpdateFornecedorDTO } from '../../../interface/cadastro/Fornecedor';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-fornecedor',
@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 export class FornecedorComponent implements OnInit {
   private fornecedorService = inject(FornecedorService);
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
 
   fornecedores = signal<Fornecedor[]>([]);
   loading = signal(false);
@@ -29,6 +28,8 @@ export class FornecedorComponent implements OnInit {
     telefone: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
     endereco: ['', [Validators.required, Validators.maxLength(200)]]
   });
+
+  constructor(private toast: ToastService) {}
 
   ngOnInit(): void {
     this.loadFornecedores();
@@ -102,10 +103,10 @@ export class FornecedorComponent implements OnInit {
   }
 
   private showSuccess(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 3000, panelClass: ['success-snackbar'] });
+    this.toast.show(message, 'Sucesso!');
   }
 
   private showError(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+    this.toast.show(message, 'Erro!');
   }
 }

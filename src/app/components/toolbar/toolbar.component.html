@@ -1,35 +1,50 @@
-<mat-toolbar color="primary">
-  <div class="toolbar">
-    <button mat-icon-button (click)="toggleSidebar()">
-      <mat-icon>menu</mat-icon>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <button
+      class="btn btn-primary me-2"
+      type="button"
+      (click)="toggleSidebar()"
+    >
+      <i class="bi bi-list"></i>
     </button>
-    <span>Gestão 360</span>
-    <span class="spacer"></span>
-    <button mat-icon-button (click)="login()">
-      <mat-icon>account_circle</mat-icon>
-    </button>
+    <a class="navbar-brand" href="#">Gestão 360</a>
+
+    <div class="d-flex ms-auto">
+      <button class="btn btn-primary me-2" type="button" (click)="login()">
+        <i class="bi bi-person-circle"></i>
+      </button>
+
+      <button class="btn btn-primary me-2" type="button">
+        <i class="bi bi-search"></i>
+      </button>
+
+      <button class="btn btn-primary me-2" type="button">
+        <i class="bi bi-bell"></i>
+      </button>
+
+      <div class="dropdown">
+        <button
+          class="btn btn-primary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-person-circle"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+          <li>
+            <button class="dropdown-item" type="button">
+              <i class="bi bi-gear"></i> Configurações
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item" type="button">
+              <i class="bi bi-box-arrow-right"></i> Sair
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-
-  <button mat-icon-button>
-    <mat-icon>search</mat-icon>
-  </button>
-
-  <button mat-icon-button>
-    <mat-icon>notifications</mat-icon>
-  </button>
-
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>account_circle</mat-icon>
-  </button>
-
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>
-      <mat-icon>settings</mat-icon>
-      <span>Configurações</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon>logout</mat-icon>
-      <span>Sair</span>
-    </button>
-  </mat-menu>
-</mat-toolbar>
+</nav>

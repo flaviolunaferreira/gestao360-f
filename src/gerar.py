@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 
 # Configurações personalizáveis
-DIRETORIO_RAIZ = "/home/flavi/projeto/gestao360-f/src/"  # Substitua pelo caminho real da sua pasta
-ARQUIVO_SAIDA = "todos_os_arquivos.txt"
-EXTENSOES_PERMITIDAS = [".html", ".scss", ".ts", ".json"]  # Extensões a serem incluídas
+DIRETORIO_RAIZ = "C:/Users/Flavio/Desktop/Projeto/gestao360-f/src"  # Substitua pelo caminho real da sua pasta
+ARQUIVO_SAIDA = "font.txt"
+EXTENSOES_PERMITIDAS = [".html", ".scss", ".ts"]  # Extensões a serem incluídas
 INCLUIR_CAMINHO_RELATIVO = True  # Define se o caminho relativo será incluído no nome do arquivo
 CODIFICACOES_POSSIVEIS = ["utf-8", "latin-1"]  # Lista de codificações a tentar, em ordem de preferência
 

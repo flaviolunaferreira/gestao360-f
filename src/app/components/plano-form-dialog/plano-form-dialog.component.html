@@ -1,50 +1,85 @@
-<h2 mat-dialog-title>{{ data.mode === 'create' ? 'Novo Plano' : 'Editar Plano' }}</h2>
+<div class="modal-header">
+  <h5 class="modal-title">{{ data.mode === 'create' ? 'Novo Plano' : 'Editar Plano' }}</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
 
-<mat-dialog-content>
+<div class="modal-body">
   <form [formGroup]="form" class="form-container">
-    <mat-form-field appearance="outline">
-      <mat-label>Nome</mat-label>
-      <input matInput formControlName="nome" required>
-      <mat-error *ngIf="form.get('nome')?.hasError('required')">
+    <div class="mb-3">
+      <label for="nome" class="form-label">Nome</label>
+      <input
+        id="nome"
+        type="text"
+        class="form-control"
+        formControlName="nome"
+        required
+      />
+      <div *ngIf="form.get('nome')?.hasError('required')" class="text-danger small">
         Campo obrigatório
-      </mat-error>
-    </mat-form-field>
+      </div>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Preço Base por Loja</mat-label>
-      <input matInput type="number" formControlName="precoBasePorLoja" required>
-      <span matTextPrefix>R$&nbsp;</span>
-      <mat-error *ngIf="form.get('precoBasePorLoja')?.hasError('required')">
+    <div class="mb-3">
+      <label for="precoBasePorLoja" class="form-label">Preço Base por Loja</label>
+      <div class="input-group">
+        <span class="input-group-text">R$</span>
+        <input
+          id="precoBasePorLoja"
+          type="number"
+          class="form-control"
+          formControlName="precoBasePorLoja"
+          required
+        />
+      </div>
+      <div *ngIf="form.get('precoBasePorLoja')?.hasError('required')" class="text-danger small">
         Campo obrigatório
-      </mat-error>
-    </mat-form-field>
+      </div>
+    </div>
 
-    <mat-checkbox formControlName="gratuito">Plano Gratuito</mat-checkbox>
+    <div class="form-check mb-3">
+      <input
+        id="gratuito"
+        type="checkbox"
+        class="form-check-input"
+        formControlName="gratuito"
+      />
+      <label for="gratuito" class="form-check-label">Plano Gratuito</label>
+    </div>
 
-    <mat-form-field appearance="outline" *ngIf="!form.get('gratuito')?.value">
-      <mat-label>Duração (meses)</mat-label>
-      <input matInput type="number" formControlName="tempoDuracaoEmMeses">
-    </mat-form-field>
+    <div class="mb-3" *ngIf="!form.get('gratuito')?.value">
+      <label for="tempoDuracaoEmMeses" class="form-label">Duração (meses)</label>
+      <input
+        id="tempoDuracaoEmMeses"
+        type="number"
+        class="form-control"
+        formControlName="tempoDuracaoEmMeses"
+      />
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Módulos</mat-label>
-      <mat-select formControlName="modulos" multiple>
-        <mat-option *ngFor="let modulo of modulosDisponiveis" [value]="modulo.id">
+    <div class="mb-3">
+      <label for="modulos" class="form-label">Módulos</label>
+      <select
+        id="modulos"
+        class="form-select"
+        formControlName="modulos"
+        multiple
+      >
+        <option *ngFor="let modulo of modulosDisponiveis" [value]="modulo.id">
           {{ modulo.nome }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </option>
+      </select>
+    </div>
   </form>
-</mat-dialog-content>
+</div>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
   <button
-    mat-flat-button
-    color="primary"
+    type="button"
+    class="btn btn-primary"
     (click)="save()"
     [disabled]="form.invalid || saving"
   >
-      Salvar
+    Salvar
   </button>
-</mat-dialog-actions>
+</div>

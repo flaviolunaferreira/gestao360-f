@@ -4,8 +4,8 @@
   </div>
   <div class="opcoes">
     <app-icon-bar (sendOptionsToSidebar)="sidebar.options = $event"></app-icon-bar>
-    <app-sidebar #sidebar></app-sidebar>
-    <div class="conteudo">
+    <app-sidebar #sidebar [ngClass]="{'hidden': isSidebarOpen}"></app-sidebar>
+    <div class="conteudo" [ngClass]="{'full-width': isSidebarOpen, 'with-sidebar': !isSidebarOpen}">
       <div class="page">
         <router-outlet></router-outlet>
       </div>

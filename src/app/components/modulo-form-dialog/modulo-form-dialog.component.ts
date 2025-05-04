@@ -1,42 +1,25 @@
 import { Component, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogModule
-} from '@angular/material/dialog';
-import {
   FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { ModuloService } from '../../service/cadastro/modulo/Modulo.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-modulo-form-dialog',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule
+    ReactiveFormsModule
   ],
   templateUrl: './modulo-form-dialog.component.html',
   styleUrls: ['./modulo-form-dialog.component.scss']
 })
 export class ModuloFormDialogComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly dialogRef = inject(MatDialogRef<ModuloFormDialogComponent>);
   private readonly moduloService = inject(ModuloService);
 
   form: FormGroup;
@@ -44,7 +27,7 @@ export class ModuloFormDialogComponent {
   mode: 'create' | 'edit' = 'create'; // Valor padrão
   isEditMode: boolean = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {
+  constructor(@Inject('MODAL_DATA') public data: {
     modulo?: any,
     mode?: 'create' | 'edit' // Tornando opcional
   }) {
@@ -81,7 +64,8 @@ export class ModuloFormDialogComponent {
         await this.moduloService.create(formData).toPromise();
       }
 
-      this.dialogRef.close(true);
+      // Fechar modal (ajuste necessário para o Bootstrap)
+      this.closeModal(true);
     } catch (error) {
       console.error('Erro ao salvar módulo:', error);
     } finally {
@@ -90,6 +74,15 @@ export class ModuloFormDialogComponent {
   }
 
   onCancel(): void {
-    this.dialogRef.close(false);
+    // Fechar modal (ajuste necessário para o Bootstrap)
+    this.closeModal(false);
+  }
+
+  private closeModal(result: boolean): void {
+    // Implementação para fechar o modal com Bootstrap
+    const modalElement = document.querySelector('.modal');
+    if (modalElement) {
+      (modalElement as any).dispatchEvent(new CustomEvent('close', { detail: result }));
+    }
   }
 }

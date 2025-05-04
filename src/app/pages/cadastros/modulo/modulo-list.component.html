@@ -1,37 +1,56 @@
-<div class="page-container">
-  <mat-card class="card-container">
-    <mat-card-header>
-      <mat-card-title>Gerenciamento de Módulos</mat-card-title>
-    </mat-card-header>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Gerenciamento de Módulos</h5>
+    </div>
 
-    <mat-divider></mat-divider>
-
-    <mat-card-content>
+    <div class="card-body">
       <!-- Formulário -->
-      <form [formGroup]="moduloForm" class="form-container">
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Nome do Módulo</mat-label>
-            <input matInput formControlName="nome" placeholder="Ex: Gestão Financeira">
-            <mat-error *ngIf="moduloForm.get('nome')?.hasError('required')">
+      <form [formGroup]="moduloForm" class="mb-4">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="nome" class="form-label">Nome do Módulo</label>
+            <input
+              id="nome"
+              type="text"
+              class="form-control"
+              formControlName="nome"
+              placeholder="Ex: Gestão Financeira"
+            />
+            <div
+              *ngIf="moduloForm.get('nome')?.hasError('required')"
+              class="text-danger small mt-1"
+            >
               Nome é obrigatório
-            </mat-error>
-          </mat-form-field>
+            </div>
+          </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Percentual de Custo</mat-label>
-            <input matInput type="number" formControlName="percentualCusto" min="0" max="100">
-            <span matTextSuffix>%</span>
-            <mat-error *ngIf="moduloForm.get('percentualCusto')?.hasError('required')">
+          <div class="col-md-6">
+            <label for="percentualCusto" class="form-label">Percentual de Custo</label>
+            <div class="input-group">
+              <input
+                id="percentualCusto"
+                type="number"
+                class="form-control"
+                formControlName="percentualCusto"
+                min="0"
+                max="100"
+              />
+              <span class="input-group-text">%</span>
+            </div>
+            <div
+              *ngIf="moduloForm.get('percentualCusto')?.hasError('required')"
+              class="text-danger small mt-1"
+            >
               Percentual é obrigatório
-            </mat-error>
-          </mat-form-field>
+            </div>
+          </div>
         </div>
 
-        <div class="form-actions">
+        <div class="mt-3">
           <button
-            mat-flat-button
-            color="primary"
+            type="button"
+            class="btn btn-primary"
             (click)="saveModulo()"
             [disabled]="moduloForm.invalid || loading()"
           >
@@ -40,7 +59,8 @@
 
           <button
             *ngIf="editMode()"
-            mat-button
+            type="button"
+            class="btn btn-secondary"
             (click)="cancelEdit()"
             [disabled]="loading()"
           >
@@ -50,46 +70,56 @@
       </form>
 
       <!-- Barra de pesquisa -->
-      <div class="search-container">
-        <mat-form-field appearance="outline" class="search-field">
-          <mat-label>Pesquisar módulos</mat-label>
-          <input matInput [(ngModel)]="searchTerm" placeholder="Digite para filtrar">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+      <div class="mb-4">
+        <label for="searchTerm" class="form-label">Pesquisar módulos</label>
+        <div class="input-group">
+          <input
+            id="searchTerm"
+            type="text"
+            class="form-control"
+            [(ngModel)]="searchTerm"
+            placeholder="Digite para filtrar"
+          />
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
       </div>
 
       <!-- Tabela -->
-      <div class="table-container">
-        <table mat-table [dataSource]="filteredModulos()" class="mat-elevation-z8">
-          <!-- Coluna Nome -->
-          <ng-container matColumnDef="nome">
-            <th mat-header-cell *matHeaderCellDef>Nome</th>
-            <td mat-cell *matCellDef="let modulo">{{ modulo.nome }}</td>
-          </ng-container>
-
-          <!-- Coluna Percentual -->
-          <ng-container matColumnDef="percentualCusto">
-            <th mat-header-cell *matHeaderCellDef>% Custo</th>
-            <td mat-cell *matCellDef="let modulo">{{ modulo.percentualCusto }}%</td>
-          </ng-container>
-
-          <!-- Coluna Ações -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Ações</th>
-            <td mat-cell *matCellDef="let modulo">
-              <button mat-icon-button color="primary" (click)="startEdit(modulo)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="deleteModulo(modulo.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Nome</th>
+              <th>% Custo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let modulo of filteredModulos()">
+              <td>{{ modulo.nome }}</td>
+              <td>{{ modulo.percentualCusto }}%</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary me-2"
+                  (click)="startEdit(modulo)"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="deleteModulo(modulo.id)"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </div>

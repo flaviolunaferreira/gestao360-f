@@ -1,16 +1,15 @@
 export interface Banco {
     id: string;
-    codigo: string;
     nome: string;
-    ispb: string;
-    dataCriacao?: Date;
-    dataAtualizacao?: Date;
+    codigoISPB: string;
+    createdAt?: Date;
+    updatedAt?: Date;
   }
   
   export interface CreateBancoDTO {
-    codigo: string;
+    id: string;
     nome: string;
-    ispb: string;
+    codigoISPB: string;
   }
   
   export interface UpdateBancoDTO extends Partial<CreateBancoDTO> {}

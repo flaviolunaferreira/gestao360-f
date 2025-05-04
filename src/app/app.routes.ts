@@ -31,7 +31,5 @@ export const routes: Routes = [
   // Rota de login (pública)
   { path: 'login', component: LoginComponent },
   
-  // Redirecionamentos
-  { path: '', redirectTo: 'banco', pathMatch: 'full' }, // Rota padrão
-  { path: '**', redirectTo: 'banco' } // Rota curinga
+
 ];

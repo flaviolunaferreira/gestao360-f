@@ -1,12 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
 import { PlanoService } from '../../../service/cadastro/plano/Plano.service';
 import { TableColumn } from '../../../components/data-table/data-table.component';
-import { PlanoFormDialogComponent } from '../../../components/plano-form-dialog/plano-form-dialog.component';
 import { PageContainerComponent } from '../../../components/page-container/page-container.component';
 import { SearchToolbarComponent } from '../../../components/search-toolbar/search-toolbar.component';
 import { DataTableComponent } from '../../../components/data-table/data-table.component';
+import { ToastService } from '../../../service/toast/toast.service';
 
 
 @Component({
@@ -17,7 +16,6 @@ import { DataTableComponent } from '../../../components/data-table/data-table.co
 })
 export class PlanoListComponent {
   private planoService = inject(PlanoService);
-  private dialog = inject(MatDialog);
 
   planos = signal<any[]>([]);
   loading = signal(false);
@@ -37,8 +35,7 @@ export class PlanoListComponent {
       plano.precoBasePorLoja.toString().includes(term)
     );
   });
-
-  constructor() {
+  constructor(private toast: ToastService) {
     this.loadPlanos();
   }
 
@@ -50,6 +47,7 @@ export class PlanoListComponent {
       });
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
+      this.toast.show('Erro ao carregar planos', 'Erro!');
     } finally {
       this.loading.set(false);
     }
@@ -57,17 +55,6 @@ export class PlanoListComponent {
 
   handleSearch(term: string) {
     this.searchTerm.set(term);
-  }
-
-  openFormDialog(plano?: any) {
-    const dialogRef = this.dialog.open(PlanoFormDialogComponent, {
-      width: '600px',
-      data: plano ? { ...plano } : null
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.loadPlanos();
-    });
   }
 
   async deletePlano(plano: any) {

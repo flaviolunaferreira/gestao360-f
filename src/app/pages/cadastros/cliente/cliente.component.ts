@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ClienteService } from '../../../service/cadastro/Cliente/Cliente.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Cliente, CreateClienteDTO, UpdateClienteDTO } from '../../../interface/cadastro/Cliente';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-cliente',
@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 export class ClienteComponent implements OnInit {
   private clienteService = inject(ClienteService);
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
 
   clientes = signal<Cliente[]>([]);
   loading = signal(false);
@@ -29,6 +28,8 @@ export class ClienteComponent implements OnInit {
     telefone: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
     endereco: ['', [Validators.required, Validators.maxLength(200)]]
   });
+
+  constructor(private toast: ToastService) {}
 
   ngOnInit(): void {
     this.loadClientes();
@@ -102,10 +103,10 @@ export class ClienteComponent implements OnInit {
   }
 
   private showSuccess(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 3000, panelClass: ['success-snackbar'] });
+    this.toast.show(message, 'Sucesso');
   }
 
   private showError(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+    this.toast.show(message, 'Erro!');
   }
 }

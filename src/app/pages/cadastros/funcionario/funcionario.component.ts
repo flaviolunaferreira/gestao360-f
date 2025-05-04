@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FuncionarioService } from '../../../service/cadastro/Funcionario/Funcionario.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Funcionario, CreateFuncionarioDTO, UpdateFuncionarioDTO } from '../../../interface/cadastro/Funcionario';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-funcionario',
@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 export class FuncionarioComponent implements OnInit {
   private funcionarioService = inject(FuncionarioService);
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
 
   funcionarios = signal<Funcionario[]>([]);
   loading = signal(false);
@@ -30,6 +29,8 @@ export class FuncionarioComponent implements OnInit {
     cargo: ['', [Validators.required, Validators.maxLength(50)]],
     dataAdmissao: ['', Validators.required]
   });
+
+  constructor(private toast: ToastService) {}
 
   ngOnInit(): void {
     this.loadFuncionarios();
@@ -108,10 +109,10 @@ export class FuncionarioComponent implements OnInit {
   }
 
   private showSuccess(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 3000, panelClass: ['success-snackbar'] });
+    this.toast.show(message, 'Sucesso!');
   }
 
   private showError(message: string) {
-    this.snackBar.open(message, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+    this.toast.show(message, 'Erro!');
   }
 }

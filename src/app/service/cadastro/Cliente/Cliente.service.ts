@@ -2,12 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Cliente, CreateClienteDTO, UpdateClienteDTO } from '../../../interface/cadastro/Cliente';
-import { MessageService } from '../../Message.service';
 
 @Injectable({ providedIn: 'root' })
 export class ClienteService {
   private readonly http = inject(HttpClient);
-  private readonly messageService = inject(MessageService);
   private readonly apiUrl = 'http://localhost:8080/api/clientes';
 
   private handleError(error: HttpErrorResponse) {
@@ -17,7 +15,6 @@ export class ClienteService {
     } else {
       errorMessage = error.error?.message || error.message;
     }
-    this.messageService.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 
