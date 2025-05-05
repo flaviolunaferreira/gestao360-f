@@ -33,8 +33,8 @@ export class IconBarComponent {
     [
       { icon: 'bank', text: 'Banco', route: '/banco' },
       { icon: 'cash-coin', text: 'Conta Corrente', route: '/conta-corrente' },
-      { icon: 'credit-card', text: 'Cartão', route: '/cadastro/cartao' },
-      { icon: 'people', text: 'Clientes', route: '/cadastro/clientes' },
+      { icon: 'credit-card', text: 'Cartão', route: '/cartao' },
+      { icon: 'people', text: 'Clientes', route: '/clientes' },
       { icon: 'wallet2', text: 'Conta', route: '/conta' },
       { icon: 'building', text: 'Empresa Cliente', route: '/empresa-cliente' },
       { icon: 'truck', text: 'Fornecedor', route: '/cadastro/fornecedor' },

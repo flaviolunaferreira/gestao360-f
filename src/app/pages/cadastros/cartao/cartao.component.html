@@ -1,90 +1,219 @@
 <div class="container-fluid mt-3">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="mb-0">
-          <i class="bi bi-credit-card me-2"></i>
-          {{ isEditing() ? 'Editar Cartão' : 'Cadastrar Novo Cartão' }}
-        </h5>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <i class="bi bi-credit-card me-2"></i>
+        {{ isEditing() ? 'Editar Cartão' : 'Cartões' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="cartaoForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <label class="form-label">Número do Cartão</label>
+            <input type="text" class="form-control" formControlName="numeroCartao" [class.is-invalid]="cartaoForm.get('numeroCartao')?.invalid && cartaoForm.get('numeroCartao')?.touched" id="numeroCartao">
+            <div class="invalid-feedback">Número do cartão deve ter 16 dígitos</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Data de Vencimento</label>
+            <input type="text" class="form-control" formControlName="dataVencimento" [class.is-invalid]="cartaoForm.get('dataVencimento')?.invalid && cartaoForm.get('dataVencimento')?.touched" placeholder="MM/yyyy">
+            <div class="invalid-feedback">Formato MM/yyyy (ex.: 12/2025)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Limite</label>
+            <input type="number" class="form-control" formControlName="limite" [class.is-invalid]="cartaoForm.get('limite')?.invalid && cartaoForm.get('limite')?.touched">
+            <div class="invalid-feedback">Limite deve ser maior ou igual a zero</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Saldo</label>
+            <input type="number" class="form-control" formControlName="saldo" [class.is-invalid]="cartaoForm.get('saldo')?.invalid && cartaoForm.get('saldo')?.touched">
+            <div class="invalid-feedback">Saldo deve ser maior ou igual a zero</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Dia de Vencimento</label>
+            <input type="number" class="form-control" formControlName="diaVencimento" [class.is-invalid]="cartaoForm.get('diaVencimento')?.invalid && cartaoForm.get('diaVencimento')?.touched">
+            <div class="invalid-feedback">Entre 1 e 31</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Tipo de Cartão</label>
+            <select class="form-select" formControlName="tipoCartao" [class.is-invalid]="cartaoForm.get('tipoCartao')?.invalid && cartaoForm.get('tipoCartao')?.touched">
+              <option *ngFor="let tipo of tipoCartaoOptions" [value]="tipo">{{ tipo }}</option>
+            </select>
+            <div class="invalid-feedback">Tipo de cartão é obrigatório</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Conta Corrente</label>
+            <select class="form-select" formControlName="contaCorrenteNumero" [class.is-invalid]="cartaoForm.get('contaCorrenteNumero')?.invalid && cartaoForm.get('contaCorrenteNumero')?.touched">
+              <option value="" disabled>Selecione</option>
+              <option *ngFor="let conta of contasCorrentes()" [value]="conta.numero">{{ conta.numero }} - {{ conta.bancoNome }}</option>
+            </select>
+            <div class="invalid-feedback">Conta corrente é obrigatória</div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="isEditing() ? cancelEdit() : cartaoForm.reset()">
+            <i class="bi bi-x-circle me-1"></i>
+            {{ isEditing() ? 'Cancelar' : 'Limpar' }}
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="cartaoForm.invalid || loading()">
+            <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
+            <i *ngIf="!loading()" class="bi bi-save me-1"></i>
+            {{ isEditing() ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+
+      <hr class="my-4">
+
+      <div class="row mb-3">
+        <div class="col-md-9">
+          <label class="form-label">Filtrar Cartões</label>
+          <input type="text" class="form-control" placeholder="Digite número, data, tipo ou conta..." [(ngModel)]="searchTerm" (ngModelChange)="filterCartoes()">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="ms-auto">
+            <label class="form-label me-2">Itens por página:</label>
+            <select [(ngModel)]="itemsPerPage" (ngModelChange)="onItemsPerPageChange()" class="form-select w-auto">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+        </div>
       </div>
-      
-      <div class="card-body">
-        <form [formGroup]="cartaoForm" (ngSubmit)="onSubmit()">
-          <div class="row g-3 mb-4">
-            <div class="col-md-4">
-              <label class="form-label">Número</label>
-              <input type="text" class="form-control" formControlName="numero" [class.is-invalid]="cartaoForm.get('numero')?.invalid && cartaoForm.get('numero')?.touched">
-              <div class="invalid-feedback">Número deve ter 16 dígitos</div>
+
+      <div *ngIf="loading()" class="text-center my-3">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th (click)="sortTable('numeroCartao')" style="cursor: pointer;">
+                Número
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'numeroCartao' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'numeroCartao' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('dataVencimento')" style="cursor: pointer;">
+                Vencimento
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'dataVencimento' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'dataVencimento' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('limite')" style="cursor: pointer;">
+                Limite
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'limite' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'limite' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('saldo')" style="cursor: pointer;">
+                Saldo
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'saldo' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'saldo' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('diaVencimento')" style="cursor: pointer;">
+                Dia Venc.
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'diaVencimento' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'diaVencimento' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('tipoCartao')" style="cursor: pointer;">
+                Tipo
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'tipoCartao' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'tipoCartao' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th (click)="sortTable('contaCorrenteNumero')" style="cursor: pointer;">
+                Conta
+                <i class="bi" [ngClass]="{
+                  'bi-arrow-up': sortField() === 'contaCorrenteNumero' && sortDirection() === 'asc',
+                  'bi-arrow-down': sortField() === 'contaCorrenteNumero' && sortDirection() === 'desc'
+                }"></i>
+              </th>
+              <th class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="paginatedCartoes().length === 0 && !loading()">
+              <td colspan="8" class="text-center">Nenhum cartão encontrado</td>
+            </tr>
+            <tr *ngFor="let cartao of paginatedCartoes()">
+              <td>{{ cartao.numeroCartao }}</td>
+              <td>{{ cartao.dataVencimento }}</td>
+              <td>{{ cartao.limite }}</td>
+              <td>{{ cartao.saldo }}</td>
+              <td>{{ cartao.diaVencimento }}</td>
+              <td>{{ cartao.tipoCartao }}</td>
+              <td>{{ cartao.contaCorrenteNumero }}</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary" (click)="startEdit(cartao)" [disabled]="loading()">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-outline-info" (click)="showDetails(cartao)" [disabled]="loading()">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-danger" (click)="deleteCartao(cartao.numeroCartao)" [disabled]="loading()">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <button class="btn btn-outline-primary" (click)="goToFirstPage()" [disabled]="currentPage() === 1 || loading()">
+          <i class="bi bi-chevron-double-left"></i>
+        </button>
+        <div class="btn-group">
+          <button *ngFor="let page of pageNumbers()" class="btn" [class.btn-primary]="currentPage() === page" [class.btn-outline-primary]="currentPage() !== page" (click)="goToPage(page)" [disabled]="loading()">
+            {{ page }}
+          </button>
+        </div>
+        <button class="btn btn-outline-primary" (click)="goToLastPage()" [disabled]="currentPage() === totalPages() || loading()">
+          <i class="bi bi-chevron-double-right"></i>
+        </button>
+      </div>
+
+      <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Detalhes do Cartão</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-md-3">
-              <label class="form-label">Bandeira</label>
-              <input type="text" class="form-control" formControlName="bandeira" [class.is-invalid]="cartaoForm.get('bandeira')?.invalid && cartaoForm.get('bandeira')?.touched">
-              <div class="invalid-feedback">Bandeira é obrigatória</div>
+            <div class="modal-body">
+              <p><strong>Número:</strong> {{ selectedCartao()?.numeroCartao }}</p>
+              <p><strong>Vencimento Cartão:</strong> {{ selectedCartao()?.dataVencimento }}</p>
+              <p><strong>Limite:</strong> {{ selectedCartao()?.limite }}</p>
+              <p><strong>Saldo:</strong> {{ selectedCartao()?.saldo }}</p>
+              <p><strong>Dia de Vencimento:</strong> {{ selectedCartao()?.diaVencimento }}</p>
+              <p><strong>Tipo:</strong> {{ selectedCartao()?.tipoCartao }}</p>
+              <p><strong>Conta Corrente:</strong> {{ selectedCartao()?.contaCorrenteNumero }}</p>
+              <p><strong>Criado:</strong> {{ selectedCartao()?.createdAt | date: 'dd/MM/yyyy' }}</p>
+              <p><strong>Atualização:</strong> {{ selectedCartao()?.updatedAt | date: 'dd/MM/yyyy' }}</p>
             </div>
-            <div class="col-md-2">
-              <label class="form-label">Tipo</label>
-              <select class="form-control" formControlName="tipo" [class.is-invalid]="cartaoForm.get('tipo')?.invalid && cartaoForm.get('tipo')?.touched">
-                <option value="CREDITO">Crédito</option>
-                <option value="DEBITO">Débito</option>
-              </select>
-              <div class="invalid-feedback">Tipo é obrigatório</div>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Validade</label>
-              <input type="date" class="form-control" formControlName="dataValidade" [class.is-invalid]="cartaoForm.get('dataValidade')?.invalid && cartaoForm.get('dataValidade')?.touched">
-              <div class="invalid-feedback">Data de validade é obrigatória</div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Titular</label>
-              <input type="text" class="form-control" formControlName="titular" [class.is-invalid]="cartaoForm.get('titular')?.invalid && cartaoForm.get('titular')?.touched">
-              <div class="invalid-feedback">Titular é obrigatório</div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
           </div>
-          <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-outline-secondary" (click)="isEditing() ? cancelEdit() : cartaoForm.reset()">
-              <i class="bi bi-x-circle me-1"></i>
-              {{ isEditing() ? 'Cancelar' : 'Limpar' }}
-            </button>
-            <button type="submit" class="btn btn-primary" [disabled]="cartaoForm.invalid || loading()">
-              <span *ngIf="loading()" class="spinner-border spinner-border-sm me-1"></span>
-              <i *ngIf="!loading()" class="bi bi-save me-1"></i>
-              {{ isEditing() ? 'Atualizar' : 'Salvar' }}
-            </button>
-          </div>
-        </form>
-  
-        <div class="mt-4 table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Número</th>
-                <th>Bandeira</th>
-                <th>Tipo</th>
-                <th>Validade</th>
-                <th>Titular</th>
-                <th class="text-end">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let cartao of cartoes()">
-                <td>{{ cartao.numero }}</td>
-                <td>{{ cartao.bandeira }}</td>
-                <td>{{ cartao.tipo }}</td>
-                <td>{{ cartao.dataValidade | date:'dd/MM/yyyy' }}</td>
-                <td>{{ cartao.titular }}</td>
-                <td class="text-end">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" (click)="startEdit(cartao)" [disabled]="loading()">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn btn-outline-danger" (click)="deleteCartao(cartao.id)" [disabled]="loading()">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
   </div>
+</div>

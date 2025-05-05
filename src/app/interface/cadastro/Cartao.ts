@@ -1,20 +1,31 @@
 export interface Cartao {
-    id: string;
-    numero: string;
-    bandeira: string;
-    tipo: 'CREDITO' | 'DEBITO';
-    dataValidade: Date;
-    titular: string;
-    dataCriacao?: Date;
-    dataAtualizacao?: Date;
-  }
-  
-  export interface CreateCartaoDTO {
-    numero: string;
-    bandeira: string;
-    tipo: 'CREDITO' | 'DEBITO';
-    dataValidade: Date;
-    titular: string;
-  }
-  
-  export interface UpdateCartaoDTO extends Partial<CreateCartaoDTO> {}
+  numeroCartao: string;
+  dataVencimento: string;
+  limite: number;
+  saldo: number;
+  diaVencimento: number;
+  tipoCartao: 'CREDITO' | 'DEBITO' | 'CRE_DEB';
+  contaCorrenteNumero: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCartaoDTO {
+  numeroCartao: string;
+  dataVencimento: string;
+  limite: number;
+  saldo: number;
+  diaVencimento: number;
+  tipoCartao: 'CREDITO' | 'DEBITO' | 'CRE_DEB';
+  contaCorrenteNumero: string;
+}
+
+export interface UpdateCartaoDTO {
+  numeroCartao: string;
+  dataVencimento: string;
+  limite: number;
+  saldo: number;
+  diaVencimento: number;
+  tipoCartao: 'CREDITO' | 'DEBITO' | 'CRE_DEB';
+  contaCorrenteNumero: string;
+}
