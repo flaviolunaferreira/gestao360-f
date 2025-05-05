@@ -37,13 +37,13 @@ export class IconBarComponent {
       { icon: 'people', text: 'Clientes', route: '/clientes' },
       { icon: 'wallet2', text: 'Conta', route: '/conta' },
       { icon: 'building', text: 'Empresa Cliente', route: '/empresa-cliente' },
-      { icon: 'truck', text: 'Fornecedor', route: '/cadastro/fornecedor' },
-      { icon: 'person-badge', text: 'Funcionários', route: '/cadastro/funcionarios' },
-      { icon: 'shop', text: 'Loja', route: '/cadastro/loja' },
-      { icon: 'grid', text: 'Módulo', route: '/cadastro/modulo' },
-      { icon: 'file-text', text: 'Plano Contratado', route: '/cadastro/plano-contratado' },
-      { icon: 'box', text: 'Produto', route: '/cadastro/produto' },
-      { icon: 'person', text: 'Usuário', route: '/cadastro/usuario' }
+      { icon: 'truck', text: 'Fornecedor', route: '/fornecedor' },
+      { icon: 'person-badge', text: 'Funcionários', route: '/funcionarios' },
+      { icon: 'shop', text: 'Loja', route: '/loja' },
+      { icon: 'grid', text: 'Módulo', route: '/modulo' },
+      { icon: 'file-text', text: 'Plano Contratado', route: '/plano-contratado' },
+      { icon: 'box', text: 'Produto', route: '/produto' },
+      { icon: 'person', text: 'Usuário', route: '/usuario' }
     ],
     // Opções para o ícone 2 (Admin)
     [
